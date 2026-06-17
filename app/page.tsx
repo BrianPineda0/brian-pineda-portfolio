@@ -25,8 +25,8 @@ const PROFILE = {
   email: "brian.pineda.work@gmail.com",
   github: "https://github.com/BrianPineda0",
   githubHandle: "BrianPineda0",
-  linkedin: "https://linkedin.com/in/brian-pineda",
-  linkedinHandle: "brian-pineda",
+  linkedin: "https://www.linkedin.com/in/brianepineda",
+  linkedinHandle: "brianepineda",
   resume: "/resume.pdf",
   availability: "Open to Summer 2026 internships",
   currently:
@@ -266,16 +266,12 @@ function Hero() {
               </Eyebrow>
             </div>
 
-            <h1 className="mt-6 font-medium tracking-tight text-ink opacity-0 animate-fade-up stagger-1">
-              <span className="block text-2xl text-slate sm:text-3xl">
-                {PROFILE.greeting}
-                <span className="font-serif italic"> 👋</span>
+            <h1 className="mt-6 font-semibold tracking-tight text-ink opacity-0 animate-fade-up stagger-1">
+              <span className="block text-2xl font-medium text-slate sm:text-3xl">
+                {PROFILE.greeting} 👋
               </span>
               <span className="mt-1 block text-6xl leading-[0.95] sm:text-7xl md:text-8xl">
-                {PROFILE.firstName}{" "}
-                <span className="text-gradient font-serif italic">
-                  {PROFILE.lastName}
-                </span>
+                {PROFILE.firstName} {PROFILE.lastName}
               </span>
             </h1>
 
@@ -346,7 +342,7 @@ function Hero() {
             <div className="relative mx-auto max-w-sm opacity-0 animate-fade-up stagger-3">
               <div className="glass rounded-[2rem] p-6">
                 <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
-                  <span className="font-serif text-7xl italic text-white">BP</span>
+                  <span className="text-6xl font-semibold tracking-tight text-white">BP</span>
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-2.5">
                   {HERO_STATS.map((s) => (
@@ -376,21 +372,18 @@ function Section({
   id,
   eyebrow,
   title,
-  serif,
   children,
 }: {
   id: string;
   eyebrow: string;
   title: React.ReactNode;
-  serif?: string;
   children: React.ReactNode;
 }) {
   return (
     <section id={id} className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24">
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-4 max-w-3xl text-3xl font-medium tracking-tight text-ink sm:text-4xl md:text-5xl">
+      <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
         {title}
-        {serif ? <span className="font-serif italic text-gradient"> {serif}</span> : null}
       </h2>
       <div className="mt-10">{children}</div>
     </section>
@@ -399,12 +392,7 @@ function Section({
 
 function About() {
   return (
-    <Section
-      id="about"
-      eyebrow="About"
-      title="A student who ships"
-      serif="real things."
-    >
+    <Section id="about" eyebrow="About" title="A student who ships real things.">
       <div className="grid gap-6 lg:grid-cols-12">
         <div className="glass rounded-3xl p-7 md:p-9 lg:col-span-7">
           <div className="space-y-5 text-[15px] leading-relaxed text-slate">
@@ -484,12 +472,7 @@ function About() {
 
 function Experience() {
   return (
-    <Section
-      id="experience"
-      eyebrow="Experience"
-      title="Where I've"
-      serif="been."
-    >
+    <Section id="experience" eyebrow="Experience" title="Where I've been.">
       <div className="space-y-5">
         {EXPERIENCE.map((item) => {
           const Icon = item.kind === "Education" ? GraduationCap : Briefcase;
@@ -555,7 +538,7 @@ function ProjectCard({ project }: { project: Project }) {
             {project.name}
           </h3>
         </div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand via-grape to-mint font-serif text-2xl italic text-white">
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand via-grape to-mint text-xl font-bold text-white">
           {project.name.charAt(0)}
         </span>
       </div>
@@ -593,7 +576,7 @@ function ProjectCard({ project }: { project: Project }) {
 
 function Work() {
   return (
-    <Section id="work" eyebrow="Projects" title="Things I've" serif="shipped.">
+    <Section id="work" eyebrow="Projects" title="Things I've shipped.">
       <div className="grid gap-6 md:grid-cols-2">
         {PROJECTS.map((p) => (
           <ProjectCard key={p.id} project={p} />
@@ -605,7 +588,7 @@ function Work() {
 
 function Stack() {
   return (
-    <Section id="stack" eyebrow="Skills" title="Tools I" serif="reach for.">
+    <Section id="stack" eyebrow="Skills" title="Tools I reach for.">
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {STACK_CATEGORIES.map((cat) => (
           <div key={cat.label} className="glass rounded-3xl p-6">
@@ -665,7 +648,7 @@ function ContactCard({
 
 function Contact() {
   return (
-    <Section id="contact" eyebrow="Contact" title="Let's build" serif="something.">
+    <Section id="contact" eyebrow="Contact" title="Let's build something.">
       <p className="-mt-4 max-w-xl text-[15px] leading-relaxed text-slate">
         Email is the fastest way to reach me — I read every message and reply
         within a day or two, usually faster if it&apos;s about an internship,

@@ -1,19 +1,11 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
-import { JetBrains_Mono, Instrument_Serif } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-jetbrains-mono",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
   display: "swap",
 });
 
@@ -67,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${GeistSans.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+      className={`${GeistSans.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-canvas text-ink font-sans antialiased">
         {children}

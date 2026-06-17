@@ -56,13 +56,13 @@ Glass surfaces come from CSS utilities, not color tokens: `.glass` (cards) and `
 
 Fonts:
 
-- **Geist Sans** — body, headings, UI (`font-sans`)
+- **Geist Sans** — everything: body, headings, name, monograms (`font-sans`)
 - **JetBrains Mono** — eyebrow labels, chips, meta lines (`font-mono`)
-- **Instrument Serif** — one italic moment per section: the serif word in each `Section` title (`serif` prop), the hero last name, the avatar/monogram — gradient-clipped via `.text-gradient` (`font-serif italic`)
+- Typography is deliberately **one consistent sans**. Do NOT reintroduce a serif/italic accent (e.g. sans first-name + serif-italic last-name, or an italic accent word in headings) — that sans→serif switch is a recognizable AI-portfolio tell and was intentionally removed. Instrument Serif is no longer loaded.
 
 ## Visual conventions
 
-- **Section headers** use the `<Section>` wrapper: an `<Eyebrow>` glass pill (mono caps + brand dot) above a title, with one italic `serif` word in the brand gradient.
+- **Section headers** use the `<Section>` wrapper: an `<Eyebrow>` glass pill (mono caps + brand dot) above a plain semibold sans title.
 - **Glass everywhere**: nav, cards, chips use `.glass` / `.glass-bar`. Hover on cards = `-translate-y-1` lift (no border-color swap).
 - **Aurora background**: fixed `<Aurora />` renders 4 blurred gradient blobs behind a faint masked grid (`.grid-faint`); they drift via `animate-aurora-{1,2,3}`.
 - **Reveal animation**: `animate-fade-up` + `stagger-{1..6}` delay utilities on hero elements; avatar uses `animate-float`.
