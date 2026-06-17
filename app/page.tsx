@@ -3,6 +3,7 @@ import {
   ArrowUpRight,
   Briefcase,
   Download,
+  FileText,
   GraduationCap,
   Github,
   Linkedin,
@@ -10,6 +11,7 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
+import Interactive from "./Interactive";
 
 // ---------------------------------------------------------------------------
 // CONTENT — everything the page shows lives here, in plain data. The components
@@ -203,7 +205,7 @@ function Eyebrow({ children }: { children: React.ReactNode }) {
 
 function Chip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="rounded-full border border-line bg-white/60 px-3 py-1 font-mono text-[11px] tracking-[0.02em] text-slate">
+    <span className="glass-clear rounded-full px-3 py-1 font-mono text-[11px] tracking-[0.02em] text-slate">
       {children}
     </span>
   );
@@ -236,12 +238,11 @@ function Nav() {
             </a>
           ))}
           <a
-            href={PROFILE.resume}
-            download
+            href="#resume"
             className="ml-1 hidden items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
-            <Download className="h-3.5 w-3.5" />
-            Resume
+            <FileText className="h-3.5 w-3.5" />
+            Résumé
           </a>
         </nav>
       </div>
@@ -340,7 +341,7 @@ function Hero() {
           {/* Avatar card */}
           <div className="lg:col-span-5">
             <div className="relative mx-auto max-w-sm opacity-0 animate-fade-up stagger-3">
-              <div className="glass rounded-[2rem] p-6">
+              <div className="glass rounded-[2rem] p-6" data-tilt>
                 <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
                   <span className="text-6xl font-semibold tracking-tight text-white">BP</span>
                 </div>
@@ -348,7 +349,7 @@ function Hero() {
                   {HERO_STATS.map((s) => (
                     <div
                       key={s.k}
-                      className="rounded-2xl border border-line bg-white/55 px-3.5 py-3"
+                      className="glass-clear rounded-2xl px-3.5 py-3"
                     >
                       <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate">
                         {s.k}
@@ -380,7 +381,11 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24">
+    <section
+      id={id}
+      data-reveal
+      className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24"
+    >
       <Eyebrow>{eyebrow}</Eyebrow>
       <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
         {title}
@@ -477,7 +482,11 @@ function Experience() {
         {EXPERIENCE.map((item) => {
           const Icon = item.kind === "Education" ? GraduationCap : Briefcase;
           return (
-            <div key={item.role} className="glass rounded-3xl p-6 md:p-8">
+            <div
+              key={item.role}
+              className="glass rounded-3xl p-6 md:p-8"
+              data-spotlight
+            >
               <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
                 <div className="flex items-center gap-3 md:w-64 md:shrink-0">
                   <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand/90 to-grape/90 text-white">
@@ -566,11 +575,19 @@ function ProjectCard({ project }: { project: Project }) {
     </>
   );
   return project.link ? (
-    <a href={project.link} target="_blank" rel="noreferrer noopener" className={className}>
+    <a
+      href={project.link}
+      target="_blank"
+      rel="noreferrer noopener"
+      className={className}
+      data-spotlight
+    >
       {inner}
     </a>
   ) : (
-    <article className={className}>{inner}</article>
+    <article className={className} data-spotlight>
+      {inner}
+    </article>
   );
 }
 
@@ -591,7 +608,7 @@ function Stack() {
     <Section id="stack" eyebrow="Skills" title="Tools I reach for.">
       <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {STACK_CATEGORIES.map((cat) => (
-          <div key={cat.label} className="glass rounded-3xl p-6">
+          <div key={cat.label} className="glass rounded-3xl p-6" data-spotlight>
             <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand">
               {cat.label}
             </div>
@@ -599,7 +616,7 @@ function Stack() {
               {cat.items.map((item) => (
                 <li
                   key={item}
-                  className="rounded-full border border-line bg-white/55 px-3 py-1 text-[13px] text-ink"
+                  className="glass-clear rounded-full px-3 py-1 text-[13px] text-ink"
                 >
                   {item}
                 </li>
@@ -629,6 +646,7 @@ function ContactCard({
       href={href}
       {...(isExternal ? { target: "_blank", rel: "noreferrer noopener" } : {})}
       className="group glass flex flex-col rounded-3xl p-6 transition-transform hover:-translate-y-1"
+      data-spotlight
     >
       <div className="flex items-center justify-between">
         <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-brand to-grape text-white">
@@ -643,6 +661,60 @@ function ContactCard({
         {value}
       </div>
     </a>
+  );
+}
+
+function Resume() {
+  return (
+    <Section id="resume" eyebrow="Résumé" title="The one-pager.">
+      <div className="glass-clear rounded-3xl p-3 sm:p-4">
+        <div className="flex items-center justify-between gap-3 px-2 py-2">
+          <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
+            <FileText className="h-4 w-4 text-brand" />
+            resume.pdf
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href={PROFILE.resume}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-1.5 rounded-full glass px-3.5 py-1.5 text-[13px] font-medium text-ink transition-transform hover:-translate-y-0.5"
+            >
+              Open
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+            <a
+              href={PROFILE.resume}
+              download
+              className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-transform hover:-translate-y-0.5"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Download
+            </a>
+          </div>
+        </div>
+        <div className="mt-2 overflow-hidden rounded-2xl border border-line bg-white">
+          <iframe
+            src={`${PROFILE.resume}#view=FitH`}
+            title="Brian Pineda résumé"
+            className="h-[78vh] min-h-[520px] w-full"
+            loading="lazy"
+          />
+        </div>
+        <p className="px-2 pt-3 text-center text-xs text-slate sm:hidden">
+          Not rendering on mobile?{" "}
+          <a
+            href={PROFILE.resume}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="font-medium text-brand underline"
+          >
+            Open the PDF in a new tab
+          </a>
+          .
+        </p>
+      </div>
+    </Section>
   );
 }
 
@@ -734,9 +806,11 @@ export default function Page() {
         <Experience />
         <Work />
         <Stack />
+        <Resume />
         <Contact />
         <Footer />
       </main>
+      <Interactive />
     </>
   );
 }
