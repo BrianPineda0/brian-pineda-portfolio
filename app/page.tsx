@@ -1,50 +1,93 @@
 import {
   ArrowRight,
   ArrowUpRight,
+  Briefcase,
   Download,
+  GraduationCap,
   Github,
   Linkedin,
   Mail,
   MapPin,
+  Sparkles,
 } from "lucide-react";
 
 // ---------------------------------------------------------------------------
-// CONTENT — edit everything from here. The components below consume this data
-// and contain no hardcoded copy, so updates only need to happen in one place.
+// CONTENT — everything the page shows lives here, in plain data. The components
+// below consume it and hold no hardcoded copy, so edits happen in one place.
 // ---------------------------------------------------------------------------
 
 const PROFILE = {
   firstName: "Brian",
   lastName: "Pineda",
-  tagline: "CS + EE @ Rutgers · AI-Native Builder",
+  greeting: "Hi, I'm Brian",
+  tagline: "CS + EE @ Rutgers · first-gen builder",
   location: "New Brunswick, NJ",
-  school: "Rutgers University",
-  gpa: "3.8 / 4.0",
-  graduation: "B.S. May 2029",
   email: "brian.pineda.work@gmail.com",
   github: "https://github.com/BrianPineda0",
+  githubHandle: "BrianPineda0",
   linkedin: "https://linkedin.com/in/brian-pineda",
+  linkedinHandle: "brian-pineda",
   resume: "/resume.pdf",
-  availability: "Available · Summer 2026",
-  bio: [
+  availability: "Open to Summer 2026 internships",
+  currently:
+    "building LLM platforms & data pipelines with an AI-native workflow",
+  // First-person intro. Pieces marked { strong } render in solid ink.
+  intro: [
+    { text: "I'm a first-generation " },
+    { text: "Computer Science + Electrical Engineering", strong: true },
     {
       text:
-        "I build full-stack products with an ",
+        " student at Rutgers who likes building things that actually ship — full-stack products, data pipelines, and the ",
     },
-    { text: "AI-native workflow", accent: true },
+    { text: "LLM systems", strong: true },
     {
       text:
-        ". TypeScript and Next.js on the front, Python and FastAPI on the back, PostgreSQL underneath. First-generation in tech. Currently exploring ",
+        " on top of them. I drive most of my work with an AI-native workflow (Claude Code, Codex, Cursor), and I'm just as curious about the ",
     },
-    { text: "LLM systems, agentic workflows", accent: true },
-    {
-      text:
-        ", and the hardware beneath them. PR Chair at the Mexican American Student Association (MASA) at Rutgers. Open to ",
-    },
-    { text: "Summer 2026 internships", accent: true },
-    { text: " in software engineering and AI/ML." },
+    { text: "transistors underneath", strong: true },
+    { text: " as the model-routing layer on top." },
   ],
 } as const;
+
+const HERO_STATS = [
+  { k: "GPA", v: "3.8 / 4.0" },
+  { k: "Status", v: "Dean's List" },
+  { k: "Grad", v: "May 2029" },
+  { k: "Focus", v: "AI / ML · Full-stack" },
+];
+
+type ExperienceItem = {
+  role: string;
+  org: string;
+  period: string;
+  kind: "Leadership" | "Education";
+  points: string[];
+};
+
+const EXPERIENCE: ExperienceItem[] = [
+  {
+    role: "PR Chair",
+    org: "Mexican American Student Association (MASA) · Rutgers",
+    period: "Mar 2026 — Present",
+    kind: "Leadership",
+    points: [
+      "Own communications and public-facing software for the organization.",
+      "Built and maintain the MASA student web app used by the membership.",
+      "Work directly with stakeholders to drive 10+ production releases.",
+    ],
+  },
+  {
+    role: "B.S. Computer Science & Electrical Engineering",
+    org: "Rutgers University — New Brunswick",
+    period: "2025 — 2029 (expected)",
+    kind: "Education",
+    points: [
+      "GPA 3.8 / 4.0 · Dean's List.",
+      "Studying the full pipeline — from silicon up to the model-routing layer.",
+      "Coursework across data structures, AI, computer architecture & systems.",
+    ],
+  },
+];
 
 type Project = {
   id: string;
@@ -65,7 +108,7 @@ const PROJECTS: Project[] = [
     category: "LLM Routing Platform",
     context: "AI Tinkerers × ElevenLabs Hackathon · NYC · Apr 2026",
     blurb:
-      "Production LLM platform with a smart router that picks the optimal model per request across 6 providers (OpenRouter, DeepSeek, Grok, ElevenLabs, fal.ai, Google) for real-time cost and quality optimization. Designed 20+ FastAPI endpoints behind a Next.js dashboard with live cost tickers, charts, and interactive panels. Built on a 4-person team using Claude Code with CLAUDE.md context files.",
+      "Production LLM platform with a smart router that picks the optimal model per request across 6 providers (OpenRouter, DeepSeek, Grok, ElevenLabs, fal.ai, Google) for real-time cost and quality optimization. 20+ FastAPI endpoints behind a Next.js dashboard with live cost tickers, charts, and interactive panels. Built on a 4-person team with Claude Code + CLAUDE.md context files.",
     stack: ["Next.js", "React", "FastAPI", "PostgreSQL", "Claude"],
     featured: true,
   },
@@ -75,7 +118,7 @@ const PROJECTS: Project[] = [
     category: "Data Pipeline",
     context: "Personal project · Jan 2026 → Present",
     blurb:
-      "5-stage Python data pipeline turning 9,497 raw scraped records into a normalized SQLite database with 3 tables totaling 75,000+ rows. Cross-source matching for 2,106 components using composite-key logic with validation at every stage. Driven end-to-end through Claude Code with structured CLAUDE.md and AGENTS.md context files.",
+      "5-stage Python pipeline turning 9,497 raw scraped records into a normalized SQLite database — 3 tables, 75,000+ rows. Cross-source matching for 2,106 components using composite-key logic with validation at every stage. Driven end-to-end through Claude Code with structured context files.",
     stack: ["Python", "SQL", "SQLite", "Pandas", "Claude Code"],
   },
   {
@@ -85,7 +128,7 @@ const PROJECTS: Project[] = [
     context: "Mar 2026 → Present · In production",
     blurb:
       "Student-facing web app for the Mexican American Student Association at Rutgers. Real-time forum, event calendar, and gallery deployed via GitHub Pages and used by the org's membership. 10+ production deployments driven by stakeholder feedback.",
-    stack: ["JavaScript", "HTML/CSS", "Firebase", "Firestore", "Cursor"],
+    stack: ["JavaScript", "Firebase", "Firestore", "HTML/CSS"],
   },
   {
     id: "android-photos",
@@ -93,83 +136,43 @@ const PROJECTS: Project[] = [
     category: "Mobile · OOP",
     context: "Nov → Dec 2025",
     blurb:
-      "Photo management app ported from a JavaFX desktop project. 4 OOP model classes restructured with clean separation of concerns. 6 user-facing features, tested across 3+ emulator configurations. Hand-written Activities with individual unit testing and Git-based collaboration.",
+      "Photo-management app ported from a JavaFX desktop project. 4 OOP model classes restructured with clean separation of concerns, 6 user-facing features, tested across 3+ emulator configs with hand-written Activities and unit tests.",
     stack: ["Java", "Android Studio"],
   },
 ];
 
-const STACK_CATEGORIES: { number: string; label: string; items: string[] }[] = [
+const STACK_CATEGORIES: { label: string; items: string[] }[] = [
   {
-    number: "01",
-    label: "AI-NATIVE WORKFLOW",
-    items: [
-      "Claude Code",
-      "Codex",
-      "Cursor",
-      "Gemini CLI",
-      "CLAUDE.md / AGENTS.md",
-      "Prompt Engineering",
-      "LLM API Integration",
-    ],
+    label: "AI-Native Workflow",
+    items: ["Claude Code", "Codex", "Cursor", "Gemini CLI", "Prompt Engineering", "LLM APIs"],
   },
   {
-    number: "02",
-    label: "FRONT END",
-    items: ["TypeScript", "JavaScript", "React", "Next.js", "Tailwind CSS", "shadcn"],
+    label: "Front End",
+    items: ["TypeScript", "React", "Next.js", "Tailwind CSS", "shadcn"],
   },
   {
-    number: "03",
-    label: "BACK END",
-    items: ["Python", "FastAPI", "Node.js", "REST API Design", "WebSocket", "JWT"],
+    label: "Back End",
+    items: ["Python", "FastAPI", "Node.js", "REST", "WebSocket", "JWT"],
   },
   {
-    number: "04",
-    label: "DATA",
-    items: ["SQL", "SQLite", "PostgreSQL", "Firebase", "Firestore", "Pandas"],
+    label: "Data",
+    items: ["SQL", "PostgreSQL", "SQLite", "Firebase", "Firestore", "Pandas"],
   },
   {
-    number: "05",
-    label: "LANGUAGES",
+    label: "Languages",
     items: ["Python", "TypeScript", "JavaScript", "Java", "C", "SQL"],
   },
   {
-    number: "06",
-    label: "CLOUD & TOOLS",
-    items: [
-      "AWS",
-      "Supabase",
-      "Git",
-      "GitHub",
-      "Linux",
-      "Android Studio",
-      "IntelliJ IDEA",
-      "VS Code",
-    ],
+    label: "Cloud & Tools",
+    items: ["AWS", "Vercel", "Supabase", "Git", "Linux", "Android Studio"],
   },
 ];
 
-const COURSEWORK = [
-  "Data Structures",
-  "Intro to AI",
-  "Software Methodology",
-  "Programming Languages",
-  "Data Management",
-  "System Programming",
-  "Computer Architecture",
-  "Discrete Structures",
-];
-
-const QUICK_STATS = [
-  { k: "MAJOR", v: "CS + EE" },
-  { k: "SCHOOL", v: "Rutgers University" },
-  { k: "GRAD", v: "May 2029" },
-  { k: "GPA", v: "3.8 / 4.0" },
-  { k: "STATUS", v: "Dean's List" },
-];
-
 const NAV_LINKS = [
-  { href: "#work", label: "Work" },
   { href: "#about", label: "About" },
+  { href: "#experience", label: "Experience" },
+  { href: "#work", label: "Projects" },
+  { href: "#stack", label: "Skills" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -177,33 +180,30 @@ const NAV_LINKS = [
 // PRIMITIVES
 // ---------------------------------------------------------------------------
 
-function PulseDot({ size = 6 }: { size?: number }) {
-  const style = { height: size, width: size };
+function Aurora() {
   return (
-    <span className="relative inline-flex" style={style}>
-      <span
-        className="absolute inset-0 rounded-full bg-accent opacity-60 animate-ping"
-      />
-      <span
-        className="relative inline-flex rounded-full bg-accent"
-        style={style}
-      />
-    </span>
-  );
-}
-
-function SectionLabel({ number, label }: { number: string; label: string }) {
-  return (
-    <div className="font-mono text-[11px] tracking-[0.22em] text-mute">
-      <span className="text-accent">[{number}]</span>{" "}
-      <span className="text-fg/80">{label}</span>
+    <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-0 bg-canvas" />
+      <div className="aurora animate-aurora-1 h-[42rem] w-[42rem] -left-40 -top-48 bg-[#7cb6ff]" />
+      <div className="aurora animate-aurora-2 h-[38rem] w-[38rem] right-[-12rem] top-[-6rem] bg-[#c9a9ff]" />
+      <div className="aurora animate-aurora-3 h-[34rem] w-[34rem] left-1/3 top-[28rem] bg-[#7ff0dc] opacity-40" />
+      <div className="aurora animate-aurora-2 h-[30rem] w-[30rem] right-[2rem] bottom-[-8rem] bg-[#ffd9a8] opacity-40" />
     </div>
   );
 }
 
-function StackPill({ children }: { children: React.ReactNode }) {
+function Eyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <span className="font-mono text-[10px] tracking-[0.12em] uppercase text-mute border border-line px-2 py-1 rounded-sm">
+    <div className="inline-flex items-center gap-2 rounded-full glass px-3 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-slate">
+      <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+      {children}
+    </div>
+  );
+}
+
+function Chip({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="rounded-full border border-line bg-white/60 px-3 py-1 font-mono text-[11px] tracking-[0.02em] text-slate">
       {children}
     </span>
   );
@@ -215,24 +215,34 @@ function StackPill({ children }: { children: React.ReactNode }) {
 
 function Nav() {
   return (
-    <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-md bg-ink/70 border-b border-line">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 h-14 flex items-center justify-between">
+    <header className="fixed inset-x-0 top-4 z-50 px-4">
+      <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 rounded-full glass-bar px-3 py-2 pl-4">
         <a href="#top" className="group flex items-center gap-2">
-          <span className="font-sans font-medium text-fg">
+          <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-br from-brand via-grape to-mint text-[10px] font-bold text-white">
+            BP
+          </span>
+          <span className="hidden font-medium tracking-tight text-ink sm:inline">
             {PROFILE.firstName} {PROFILE.lastName}
           </span>
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-accent group-hover:scale-125 transition-transform" />
         </a>
-        <nav className="flex items-center gap-1 md:gap-2">
+        <nav className="flex items-center gap-0.5">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="font-mono text-[11px] tracking-[0.18em] uppercase text-mute hover:text-accent transition-colors px-3 py-2"
+              className="rounded-full px-3 py-1.5 text-[13px] text-slate transition-colors hover:bg-white/70 hover:text-ink"
             >
               {link.label}
             </a>
           ))}
+          <a
+            href={PROFILE.resume}
+            download
+            className="ml-1 hidden items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-transform hover:-translate-y-0.5 sm:inline-flex"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Resume
+          </a>
         </nav>
       </div>
     </header>
@@ -241,48 +251,38 @@ function Nav() {
 
 function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden border-b border-line">
-      <div className="absolute inset-0 dot-grid pointer-events-none" aria-hidden="true" />
-      <div className="relative max-w-7xl mx-auto px-6 md:px-10 pt-36 md:pt-44 pb-24 md:pb-32">
-        <div className="grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-10 lg:col-span-9">
-            {/* Availability badge */}
-            <div
-              className="inline-flex items-center gap-2.5 border border-line bg-panel/60 backdrop-blur-sm px-3 py-1.5 rounded-full opacity-0 animate-fade-up"
-              style={{ animationDelay: "0ms" }}
-            >
-              <PulseDot size={6} />
-              <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-fg/80">
+    <section id="top" className="relative">
+      <div className="absolute inset-0 grid-faint" aria-hidden="true" />
+      <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-36 sm:px-8 md:pb-24 md:pt-44">
+        <div className="grid items-center gap-12 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <div className="opacity-0 animate-fade-up">
+              <Eyebrow>
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-70" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
+                </span>
                 {PROFILE.availability}
-              </span>
+              </Eyebrow>
             </div>
 
-            {/* Tagline */}
-            <p
-              className="mt-10 font-mono text-[11px] tracking-[0.22em] uppercase text-mute opacity-0 animate-fade-up stagger-1"
-            >
-              {PROFILE.tagline}
-            </p>
-
-            {/* Name */}
-            <h1
-              className="mt-4 font-sans font-medium tracking-[-0.04em] leading-[0.92] text-fg text-6xl sm:text-7xl md:text-8xl lg:text-9xl opacity-0 animate-fade-up stagger-2"
-            >
-              {PROFILE.firstName}
-              <br />
-              <span className="font-serif italic font-normal text-fg">
-                {PROFILE.lastName}
+            <h1 className="mt-6 font-medium tracking-tight text-ink opacity-0 animate-fade-up stagger-1">
+              <span className="block text-2xl text-slate sm:text-3xl">
+                {PROFILE.greeting}
+                <span className="font-serif italic"> 👋</span>
               </span>
-              <span className="text-accent">.</span>
+              <span className="mt-1 block text-6xl leading-[0.95] sm:text-7xl md:text-8xl">
+                {PROFILE.firstName}{" "}
+                <span className="text-gradient font-serif italic">
+                  {PROFILE.lastName}
+                </span>
+              </span>
             </h1>
 
-            {/* Bio */}
-            <p
-              className="mt-10 max-w-2xl text-base md:text-lg leading-relaxed text-fg/85 opacity-0 animate-fade-up stagger-3"
-            >
-              {PROFILE.bio.map((piece, i) =>
-                "accent" in piece && piece.accent ? (
-                  <span key={i} className="text-accent">
+            <p className="mt-7 max-w-xl text-lg leading-relaxed text-slate opacity-0 animate-fade-up stagger-2">
+              {PROFILE.intro.map((piece, i) =>
+                "strong" in piece && piece.strong ? (
+                  <span key={i} className="font-medium text-ink">
                     {piece.text}
                   </span>
                 ) : (
@@ -291,50 +291,79 @@ function Hero() {
               )}
             </p>
 
-            {/* CTAs */}
-            <div
-              className="mt-10 flex flex-wrap items-center gap-3 opacity-0 animate-fade-up stagger-4"
-            >
+            <div className="mt-8 flex flex-wrap items-center gap-3 opacity-0 animate-fade-up stagger-3">
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2 bg-accent text-ink font-medium text-sm px-5 py-3 rounded-sm hover:bg-accent/90 transition-colors"
+                className="group inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-white shadow-float transition-transform hover:-translate-y-0.5"
               >
-                View work
+                See my work
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
                 href="#contact"
-                className="group inline-flex items-center gap-2 border border-line hover:border-accent text-fg text-sm px-5 py-3 rounded-sm transition-colors"
+                className="group inline-flex items-center gap-2 rounded-full glass px-5 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-0.5"
               >
                 Get in touch
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
-              <a
-                href={PROFILE.resume}
-                download
-                className="group inline-flex items-center gap-2 font-mono text-[11px] tracking-[0.18em] uppercase text-mute hover:text-accent px-3 py-2 transition-colors"
-              >
-                <Download className="h-3.5 w-3.5" />
-                Resume
-              </a>
+              <div className="flex items-center gap-1">
+                <a
+                  href={PROFILE.github}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="GitHub"
+                  className="grid h-11 w-11 place-items-center rounded-full glass text-ink transition-transform hover:-translate-y-0.5"
+                >
+                  <Github className="h-[18px] w-[18px]" />
+                </a>
+                <a
+                  href={PROFILE.linkedin}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label="LinkedIn"
+                  className="grid h-11 w-11 place-items-center rounded-full glass text-ink transition-transform hover:-translate-y-0.5"
+                >
+                  <Linkedin className="h-[18px] w-[18px]" />
+                </a>
+              </div>
             </div>
 
-            {/* Meta line */}
-            <div
-              className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-2 font-mono text-[11px] tracking-[0.14em] uppercase text-mute opacity-0 animate-fade-up stagger-5"
-            >
+            <div className="mt-9 flex flex-wrap items-center gap-2 font-mono text-[12px] text-slate opacity-0 animate-fade-up stagger-4">
               <span className="inline-flex items-center gap-1.5">
-                <MapPin className="h-3 w-3 text-accent" />
+                <MapPin className="h-3.5 w-3.5 text-brand" />
                 {PROFILE.location}
               </span>
-              <span className="text-line">/</span>
-              <span>{PROFILE.school}</span>
-              <span className="text-line">/</span>
-              <span>
-                GPA <span className="text-fg">{PROFILE.gpa}</span>
+              <span className="text-line">·</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Sparkles className="h-3.5 w-3.5 text-grape" />
+                Currently {PROFILE.currently}
               </span>
-              <span className="text-line">/</span>
-              <span>{PROFILE.graduation}</span>
+            </div>
+          </div>
+
+          {/* Avatar card */}
+          <div className="lg:col-span-5">
+            <div className="relative mx-auto max-w-sm opacity-0 animate-fade-up stagger-3">
+              <div className="glass rounded-[2rem] p-6">
+                <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
+                  <span className="font-serif text-7xl italic text-white">BP</span>
+                </div>
+                <div className="mt-6 grid grid-cols-2 gap-2.5">
+                  {HERO_STATS.map((s) => (
+                    <div
+                      key={s.k}
+                      className="rounded-2xl border border-line bg-white/55 px-3.5 py-3"
+                    >
+                      <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-slate">
+                        {s.k}
+                      </div>
+                      <div className="mt-0.5 text-sm font-medium text-ink">
+                        {s.v}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -343,100 +372,212 @@ function Hero() {
   );
 }
 
-function FeaturedCard({ project }: { project: Project }) {
-  const className =
-    "group relative border border-line bg-panel/40 hover:border-accent transition-all duration-300 hover:-translate-y-1 block";
-  const inner = (
-    <>
-      <div className="absolute top-0 right-0 z-10">
-        <div className="font-mono text-[10px] tracking-[0.22em] bg-accent text-ink px-3 py-1.5">
-          FEATURED
+function Section({
+  id,
+  eyebrow,
+  title,
+  serif,
+  children,
+}: {
+  id: string;
+  eyebrow: string;
+  title: React.ReactNode;
+  serif?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section id={id} className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24">
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h2 className="mt-4 max-w-3xl text-3xl font-medium tracking-tight text-ink sm:text-4xl md:text-5xl">
+        {title}
+        {serif ? <span className="font-serif italic text-gradient"> {serif}</span> : null}
+      </h2>
+      <div className="mt-10">{children}</div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <Section
+      id="about"
+      eyebrow="About"
+      title="A student who ships"
+      serif="real things."
+    >
+      <div className="grid gap-6 lg:grid-cols-12">
+        <div className="glass rounded-3xl p-7 md:p-9 lg:col-span-7">
+          <div className="space-y-5 text-[15px] leading-relaxed text-slate">
+            <p>
+              I&apos;m studying Computer Science and Electrical Engineering at
+              Rutgers because I want the whole picture — from the{" "}
+              <span className="font-medium text-ink">transistors</span> that make
+              computation possible up through the{" "}
+              <span className="font-medium text-ink">model-routing layer</span>{" "}
+              that&apos;s reshaping how software gets built.
+            </p>
+            <p>
+              Most of my recent work is{" "}
+              <span className="font-medium text-ink">
+                production-grade products built with AI tooling
+              </span>{" "}
+              — Claude Code, Codex, and Cursor as primary collaborators, with{" "}
+              <span className="font-mono text-[0.9em] text-ink">CLAUDE.md</span>{" "}
+              and{" "}
+              <span className="font-mono text-[0.9em] text-ink">AGENTS.md</span>{" "}
+              files driving the context. Shipped LLM platforms, end-to-end data
+              pipelines, and real student-org software that people actually use.
+            </p>
+            <p>
+              I&apos;m a{" "}
+              <span className="font-medium text-ink">first-generation</span>{" "}
+              student in tech, and I serve as{" "}
+              <span className="font-medium text-ink">PR Chair at MASA Rutgers</span>{" "}
+              — so I&apos;m as comfortable working with stakeholders and a
+              community as I am in the IDE. Open to Summer 2026 SWE and AI/ML
+              internships, especially anywhere LLM systems or the
+              hardware-software boundary is the interesting problem.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-6 lg:col-span-5">
+          <div className="glass rounded-3xl p-7">
+            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate">
+              At a glance
+            </div>
+            <dl className="mt-4 divide-y divide-line">
+              {[
+                ["Major", "CS + EE"],
+                ["School", "Rutgers University"],
+                ["Location", PROFILE.location],
+                ["Graduation", "May 2029"],
+                ["Open to", "Summer 2026 internships"],
+              ].map(([k, v]) => (
+                <div key={k} className="flex items-baseline justify-between gap-4 py-2.5">
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-slate">
+                    {k}
+                  </dt>
+                  <dd className="text-right text-sm font-medium text-ink">{v}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+          <a
+            href={PROFILE.resume}
+            download
+            className="group flex items-center justify-between rounded-3xl glass p-6 transition-transform hover:-translate-y-0.5"
+          >
+            <div>
+              <div className="font-medium text-ink">Grab my résumé</div>
+              <div className="text-sm text-slate">One-page PDF</div>
+            </div>
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-white transition-transform group-hover:-translate-y-0.5">
+              <Download className="h-4 w-4" />
+            </span>
+          </a>
         </div>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 p-8 md:p-10">
-        <div className="lg:col-span-7 flex flex-col">
-          <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent">
-            {project.category}
-          </div>
-          <h3 className="mt-3 font-sans font-medium tracking-tight text-4xl md:text-5xl text-fg group-hover:text-fg">
-            {project.name}
-          </h3>
-          <p className="mt-3 font-mono text-[11px] tracking-[0.14em] uppercase text-mute">
-            {project.context}
-          </p>
-          <p className="mt-6 text-fg/80 leading-relaxed max-w-2xl">
-            {project.blurb}
-          </p>
-          <div className="mt-7 flex flex-wrap gap-2">
-            {project.stack.map((s) => (
-              <StackPill key={s}>{s}</StackPill>
-            ))}
-          </div>
-          {project.link ? (
-            <div className="mt-7 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-mute group-hover:text-accent transition-colors">
-              View project
-              <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </div>
-          ) : null}
-        </div>
-        <div className="lg:col-span-5 hidden lg:flex items-end justify-end">
-          <div className="relative w-full aspect-square max-w-md">
-            <div className="absolute inset-0 border border-line bg-ink overflow-hidden">
-              <div className="absolute inset-0 dot-grid opacity-70" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="font-serif italic text-7xl text-accent/30 select-none">
-                  {project.name.charAt(0)}
+    </Section>
+  );
+}
+
+function Experience() {
+  return (
+    <Section
+      id="experience"
+      eyebrow="Experience"
+      title="Where I've"
+      serif="been."
+    >
+      <div className="space-y-5">
+        {EXPERIENCE.map((item) => {
+          const Icon = item.kind === "Education" ? GraduationCap : Briefcase;
+          return (
+            <div key={item.role} className="glass rounded-3xl p-6 md:p-8">
+              <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
+                <div className="flex items-center gap-3 md:w-64 md:shrink-0">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand/90 to-grape/90 text-white">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <div>
+                    <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
+                      {item.kind}
+                    </div>
+                    <div className="font-mono text-[12px] text-ink">
+                      {item.period}
+                    </div>
+                  </div>
+                </div>
+                <div className="md:flex-1">
+                  <h3 className="text-xl font-medium tracking-tight text-ink">
+                    {item.role}
+                  </h3>
+                  <p className="mt-0.5 text-sm text-slate">{item.org}</p>
+                  <ul className="mt-4 space-y-2">
+                    {item.points.map((p) => (
+                      <li
+                        key={p}
+                        className="flex gap-2.5 text-[15px] leading-relaxed text-slate"
+                      >
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand" />
+                        {p}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-              <div className="absolute bottom-4 left-4 font-mono text-[10px] tracking-[0.18em] text-mute">
-                ./{project.id}
-              </div>
-              <div className="absolute top-4 left-4 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                <span className="h-1.5 w-1.5 rounded-full bg-amber" />
-                <span className="h-1.5 w-1.5 rounded-full bg-line" />
-              </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
-    </>
-  );
-  return project.link ? (
-    <a href={project.link} target="_blank" rel="noreferrer noopener" className={className}>
-      {inner}
-    </a>
-  ) : (
-    <article className={className}>{inner}</article>
+    </Section>
   );
 }
 
 function ProjectCard({ project }: { project: Project }) {
-  const className =
-    "group relative border border-line bg-panel/30 hover:border-accent transition-all duration-300 hover:-translate-y-1 p-7 md:p-8 flex flex-col";
+  const featured = project.featured;
+  const className = `group glass rounded-3xl p-7 md:p-8 transition-transform hover:-translate-y-1 ${
+    featured ? "md:col-span-2" : ""
+  } flex flex-col`;
   const inner = (
     <>
-      <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent">
-        {project.category}
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand">
+            {project.category}
+          </div>
+          <h3
+            className={`mt-2 font-medium tracking-tight text-ink ${
+              featured ? "text-3xl md:text-4xl" : "text-2xl"
+            }`}
+          >
+            {project.name}
+          </h3>
+        </div>
+        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand via-grape to-mint font-serif text-2xl italic text-white">
+          {project.name.charAt(0)}
+        </span>
       </div>
-      <h3 className="mt-2 font-sans font-medium tracking-tight text-2xl md:text-3xl text-fg">
-        {project.name}
-      </h3>
-      <p className="mt-2 font-mono text-[11px] tracking-[0.14em] uppercase text-mute">
+      <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-slate">
         {project.context}
       </p>
-      <p className="mt-5 text-sm text-fg/75 leading-relaxed flex-grow">
+      <p
+        className={`mt-4 leading-relaxed text-slate ${
+          featured ? "max-w-2xl text-[15px]" : "text-sm"
+        } flex-grow`}
+      >
         {project.blurb}
       </p>
       <div className="mt-6 flex flex-wrap gap-2">
         {project.stack.map((s) => (
-          <StackPill key={s}>{s}</StackPill>
+          <Chip key={s}>{s}</Chip>
         ))}
       </div>
       {project.link ? (
-        <div className="mt-6 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-mute group-hover:text-accent transition-colors">
+        <div className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-brand">
           View project
-          <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </div>
       ) : null}
     </>
@@ -451,165 +592,40 @@ function ProjectCard({ project }: { project: Project }) {
 }
 
 function Work() {
-  const featured = PROJECTS.find((p) => p.featured)!;
-  const rest = PROJECTS.filter((p) => !p.featured);
   return (
-    <section id="work" className="relative border-b border-line">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-32">
-        <div className="grid grid-cols-12 gap-6 items-end mb-12">
-          <div className="col-span-12 md:col-span-7">
-            <SectionLabel number="01" label="SELECTED WORK" />
-            <h2 className="mt-4 font-sans font-medium tracking-tight text-3xl md:text-5xl text-fg">
-              Things I&apos;ve <span className="font-serif italic">shipped</span>.
-            </h2>
-          </div>
-          <div className="col-span-12 md:col-span-5 md:text-right">
-            <p className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute">
-              {PROJECTS.length} projects · 2025 → 2026
-            </p>
-          </div>
-        </div>
-
-        <FeaturedCard project={featured} />
-
-        <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          {rest.map((p, i) => (
-            <div
-              key={p.id}
-              className={i === rest.length - 1 && rest.length % 2 !== 0 ? "md:col-span-2" : ""}
-            >
-              <ProjectCard project={p} />
-            </div>
-          ))}
-        </div>
+    <Section id="work" eyebrow="Projects" title="Things I've" serif="shipped.">
+      <div className="grid gap-6 md:grid-cols-2">
+        {PROJECTS.map((p) => (
+          <ProjectCard key={p.id} project={p} />
+        ))}
       </div>
-    </section>
-  );
-}
-
-function About() {
-  return (
-    <section id="about" className="relative border-b border-line">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-32">
-        <SectionLabel number="02" label="ABOUT" />
-        <div className="mt-10 grid grid-cols-12 gap-6 md:gap-10">
-          <div className="col-span-12 md:col-span-7">
-            <h2 className="font-sans font-medium tracking-tight text-3xl md:text-5xl text-fg leading-[1.05]">
-              First-gen <span className="font-serif italic">engineer</span> learning
-              the entire stack — from <span className="text-accent">silicon</span> to{" "}
-              <span className="text-accent">agents</span>.
-            </h2>
-            <div className="mt-8 space-y-5 text-fg/80 leading-relaxed">
-              <p>
-                I&apos;m studying Computer Science and Electrical Engineering at
-                Rutgers because I want to understand the full pipeline — from the
-                transistors that make computation possible up through the model
-                routing layer that&apos;s reshaping how software gets built.
-              </p>
-              <p>
-                Most of my recent work has been{" "}
-                <span className="text-accent">production-grade products built with AI tooling</span>
-                : Claude Code, Codex, and Cursor as primary collaborators, with{" "}
-                <span className="font-mono text-[0.9em] text-accent">CLAUDE.md</span> and{" "}
-                <span className="font-mono text-[0.9em] text-accent">AGENTS.md</span>{" "}
-                files driving the context. The output speaks for itself: shipped
-                LLM platforms, end-to-end data pipelines, real student-org software
-                in production.
-              </p>
-              <p>
-                Outside the IDE I serve as{" "}
-                <span className="text-accent">PR Chair at MASA Rutgers</span>, where
-                I work with stakeholders, ship public-facing software, and own
-                communications for a community I care about. I&apos;m open to{" "}
-                <span className="text-accent">Summer 2026 SWE and AI/ML internships</span>{" "}
-                — particularly anywhere LLM systems, agentic workflows, or the
-                hardware-software boundary is the interesting problem.
-              </p>
-            </div>
-          </div>
-
-          <div className="col-span-12 md:col-span-5 flex flex-col gap-6">
-            <div className="border border-line bg-panel/40 p-6 md:p-7">
-              <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-accent">
-                [QUICK STATS]
-              </div>
-              <dl className="mt-5 divide-y divide-line/70">
-                {QUICK_STATS.map((stat) => (
-                  <div
-                    key={stat.k}
-                    className="py-3 flex items-baseline justify-between gap-4"
-                  >
-                    <dt className="font-mono text-[10px] tracking-[0.18em] uppercase text-mute">
-                      {stat.k}
-                    </dt>
-                    <dd className="font-sans text-sm text-fg text-right">
-                      {stat.v}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            <div className="border border-line bg-panel/40 p-6 md:p-7">
-              <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-accent">
-                [RELEVANT COURSEWORK]
-              </div>
-              <ul className="mt-5 grid grid-cols-2 gap-x-3 gap-y-2">
-                {COURSEWORK.map((course) => (
-                  <li
-                    key={course}
-                    className="font-mono text-[11px] tracking-[0.04em] text-fg/80 flex items-center gap-2"
-                  >
-                    <span className="text-accent">›</span>
-                    {course}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    </Section>
   );
 }
 
 function Stack() {
   return (
-    <section id="stack" className="relative border-b border-line">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-32">
-        <div className="grid grid-cols-12 gap-6 items-end mb-12">
-          <div className="col-span-12 md:col-span-7">
-            <SectionLabel number="03" label="STACK" />
-            <h2 className="mt-4 font-sans font-medium tracking-tight text-3xl md:text-5xl text-fg">
-              Tools I <span className="font-serif italic">reach for</span>.
-            </h2>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {STACK_CATEGORIES.map((cat) => (
-            <div
-              key={cat.number}
-              className="group border border-line bg-panel/30 p-6 md:p-7 hover:border-accent transition-colors"
-            >
-              <div className="font-mono text-[10px] tracking-[0.22em] text-accent">
-                [{cat.number}] {cat.label}
-              </div>
-              <ul className="mt-5 flex flex-wrap gap-2">
-                {cat.items.map((item) => (
-                  <li
-                    key={item}
-                    className="font-mono text-[11px] tracking-[0.04em] text-fg/85 border border-line px-2.5 py-1 rounded-sm group-hover:border-line/80"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+    <Section id="stack" eyebrow="Skills" title="Tools I" serif="reach for.">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {STACK_CATEGORIES.map((cat) => (
+          <div key={cat.label} className="glass rounded-3xl p-6">
+            <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand">
+              {cat.label}
             </div>
-          ))}
-        </div>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {cat.items.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-line bg-white/55 px-3 py-1 text-[13px] text-ink"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-    </section>
+    </Section>
   );
 }
 
@@ -629,19 +645,19 @@ function ContactCard({
     <a
       href={href}
       {...(isExternal ? { target: "_blank", rel: "noreferrer noopener" } : {})}
-      className="group relative border border-line bg-panel/30 hover:border-accent hover:-translate-y-1 transition-all duration-300 p-6 md:p-7 flex flex-col"
+      className="group glass flex flex-col rounded-3xl p-6 transition-transform hover:-translate-y-1"
     >
       <div className="flex items-center justify-between">
-        <div className="font-mono text-[10px] tracking-[0.22em] uppercase text-mute group-hover:text-accent transition-colors">
-          {label}
-        </div>
-        <ArrowUpRight className="h-4 w-4 text-mute group-hover:text-accent transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-brand to-grape text-white">
+          <Icon className="h-5 w-5" />
+        </span>
+        <ArrowUpRight className="h-4 w-4 text-slate transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
       </div>
-      <div className="mt-7 flex items-start gap-3">
-        <Icon className="h-5 w-5 text-accent mt-0.5 shrink-0" />
-        <div className="font-sans text-sm md:text-base text-fg break-all">
-          {value}
-        </div>
+      <div className="mt-5 font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
+        {label}
+      </div>
+      <div className="mt-1 break-all text-[15px] font-medium text-ink">
+        {value}
       </div>
     </a>
   );
@@ -649,61 +665,71 @@ function ContactCard({
 
 function Contact() {
   return (
-    <section id="contact" className="relative border-b border-line">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-24 md:py-32">
-        <SectionLabel number="04" label="CONTACT" />
-        <div className="mt-8 grid grid-cols-12 gap-6">
-          <div className="col-span-12 md:col-span-8">
-            <h2 className="font-sans font-medium tracking-[-0.03em] leading-[1.0] text-5xl md:text-7xl text-fg">
-              Let&apos;s <span className="font-serif italic">build</span>
-              <br />
-              something<span className="text-accent">.</span>
-            </h2>
-            <p className="mt-6 max-w-xl text-fg/75 leading-relaxed">
-              Best reached over email. I read every message and reply within a
-              day or two — usually faster if it&apos;s about an internship,
-              hackathon, or an interesting LLM problem.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <ContactCard
-            icon={Mail}
-            label="EMAIL"
-            value={PROFILE.email}
-            href={`mailto:${PROFILE.email}`}
-          />
-          <ContactCard
-            icon={Linkedin}
-            label="LINKEDIN"
-            value="brian-pineda"
-            href={PROFILE.linkedin}
-          />
-          <ContactCard
-            icon={Github}
-            label="GITHUB"
-            value="BrianPineda0"
-            href={PROFILE.github}
-          />
-        </div>
+    <Section id="contact" eyebrow="Contact" title="Let's build" serif="something.">
+      <p className="-mt-4 max-w-xl text-[15px] leading-relaxed text-slate">
+        Email is the fastest way to reach me — I read every message and reply
+        within a day or two, usually faster if it&apos;s about an internship,
+        hackathon, or an interesting LLM problem.
+      </p>
+      <div className="mt-8 grid gap-5 sm:grid-cols-3">
+        <ContactCard
+          icon={Mail}
+          label="Email"
+          value={PROFILE.email}
+          href={`mailto:${PROFILE.email}`}
+        />
+        <ContactCard
+          icon={Linkedin}
+          label="LinkedIn"
+          value={PROFILE.linkedinHandle}
+          href={PROFILE.linkedin}
+        />
+        <ContactCard
+          icon={Github}
+          label="GitHub"
+          value={PROFILE.githubHandle}
+          href={PROFILE.github}
+        />
       </div>
-    </section>
+    </Section>
   );
 }
 
 function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative">
-      <div className="max-w-7xl mx-auto px-6 md:px-10 py-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-mute">
-          © {year} {PROFILE.firstName} {PROFILE.lastName} · Built with Next.js +
-          Tailwind
+    <footer className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8">
+      <div className="glass flex flex-col items-start justify-between gap-4 rounded-3xl px-6 py-5 sm:flex-row sm:items-center">
+        <div className="text-sm text-slate">
+          © {year} {PROFILE.firstName} {PROFILE.lastName} · Built with Next.js,
+          Tailwind & a lot of coffee.
         </div>
-        <div className="inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.18em] uppercase text-mute">
-          <PulseDot size={6} />
-          <span>System operational</span>
+        <div className="flex items-center gap-3">
+          <a
+            href={PROFILE.github}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="GitHub"
+            className="text-slate transition-colors hover:text-ink"
+          >
+            <Github className="h-[18px] w-[18px]" />
+          </a>
+          <a
+            href={PROFILE.linkedin}
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="LinkedIn"
+            className="text-slate transition-colors hover:text-ink"
+          >
+            <Linkedin className="h-[18px] w-[18px]" />
+          </a>
+          <a
+            href={`mailto:${PROFILE.email}`}
+            aria-label="Email"
+            className="text-slate transition-colors hover:text-ink"
+          >
+            <Mail className="h-[18px] w-[18px]" />
+          </a>
         </div>
       </div>
     </footer>
@@ -716,14 +742,18 @@ function Footer() {
 
 export default function Page() {
   return (
-    <main className="relative">
+    <>
+      <Aurora />
       <Nav />
-      <Hero />
-      <Work />
-      <About />
-      <Stack />
-      <Contact />
-      <Footer />
-    </main>
+      <main className="relative">
+        <Hero />
+        <About />
+        <Experience />
+        <Work />
+        <Stack />
+        <Contact />
+        <Footer />
+      </main>
+    </>
   );
 }

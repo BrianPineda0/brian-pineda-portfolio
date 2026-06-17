@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-// Generated favicon — teal "B." mark on ink, matching the site's brand tokens.
+// Generated favicon — white "B" on the brand gradient, matching the nav monogram.
 export const runtime = "edge";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
@@ -15,15 +15,14 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0a0a",
-          color: "#5eead4",
-          fontSize: 24,
-          fontWeight: 600,
-          letterSpacing: "-0.04em",
+          background: "linear-gradient(135deg, #0a84ff 0%, #6d5bd0 50%, #1eb6a0 100%)",
+          color: "#ffffff",
+          fontSize: 22,
+          fontWeight: 700,
+          borderRadius: 7,
         }}
       >
         B
-        <span style={{ color: "#5eead4" }}>.</span>
       </div>
     ),
     { ...size }

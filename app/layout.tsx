@@ -69,9 +69,8 @@ export default function RootLayout({
       lang="en"
       className={`${GeistSans.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
     >
-      <body className="bg-ink text-fg font-sans antialiased selection:bg-accent selection:text-ink">
+      <body className="bg-canvas text-ink font-sans antialiased">
         {children}
-        <div className="noise-grain" aria-hidden="true" />
       </body>
     </html>
   );

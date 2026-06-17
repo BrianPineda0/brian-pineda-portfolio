@@ -1,11 +1,11 @@
 import { ImageResponse } from "next/og";
 
-// Social share card (Twitter/LinkedIn/iMessage previews). On-brand: ink
-// background, teal dot-grid wash, name + tagline. 1200x630 is the standard size.
+// Social share card (Twitter/LinkedIn/iMessage previews). Light "Apple" canvas,
+// gradient name, glass-ish chips. 1200x630 is the standard size.
 export const runtime = "edge";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = "Brian Pineda — CS + EE @ Rutgers · AI-Native Builder";
+export const alt = "Brian Pineda — CS + EE @ Rutgers";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -17,81 +17,77 @@ export default function OpengraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0a0a0a",
-          backgroundImage:
-            "radial-gradient(rgba(94,234,212,0.10) 1.5px, transparent 1.5px)",
-          backgroundSize: "32px 32px",
+          // Satori (next/og) only supports simple gradients — keep it linear.
+          background:
+            "linear-gradient(135deg, #e3eeff 0%, #f4f4f6 42%, #e7faf4 100%)",
           padding: "72px 80px",
-          color: "#e5e5e5",
+          color: "#1d1d1f",
         }}
       >
-        {/* Availability chip */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 14,
-            fontFamily: "monospace",
-            fontSize: 22,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "#737373",
-          }}
-        >
+        {/* Top row: monogram + availability */}
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <div
             style={{
-              width: 14,
-              height: 14,
-              borderRadius: 999,
-              background: "#5eead4",
-            }}
-          />
-          Available · Summer 2026
-        </div>
-
-        {/* Name */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              fontSize: 140,
-              fontWeight: 600,
-              letterSpacing: "-0.05em",
-              lineHeight: 1,
+              width: 60,
+              height: 60,
+              borderRadius: 16,
               display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: 28,
+              fontWeight: 700,
+              background: "linear-gradient(135deg, #0a84ff, #6d5bd0 50%, #1eb6a0)",
             }}
           >
-            Brian Pineda<span style={{ color: "#5eead4" }}>.</span>
+            BP
           </div>
           <div
             style={{
-              marginTop: 28,
-              fontSize: 30,
-              color: "rgba(229,229,229,0.85)",
-              maxWidth: 880,
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "10px 18px",
+              borderRadius: 999,
+              background: "rgba(255,255,255,0.65)",
+              border: "1px solid rgba(255,255,255,0.8)",
+              fontFamily: "monospace",
+              fontSize: 20,
+              color: "#6e6e73",
             }}
           >
-            Full-stack products with an AI-native workflow. TypeScript, Next.js,
-            Python, and the LLM systems on top.
+            <div style={{ width: 12, height: 12, borderRadius: 999, background: "#1eb6a0" }} />
+            Open to Summer 2026 internships
           </div>
         </div>
 
-        {/* Footer meta */}
-        <div
-          style={{
-            display: "flex",
-            gap: 28,
-            fontFamily: "monospace",
-            fontSize: 22,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "#737373",
-          }}
-        >
-          <span>CS + EE @ Rutgers</span>
-          <span style={{ color: "#1f1f1f" }}>/</span>
-          <span>New Brunswick, NJ</span>
-          <span style={{ color: "#1f1f1f" }}>/</span>
-          <span style={{ color: "#5eead4" }}>brianpineda.dev</span>
+        {/* Name + tagline */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ fontSize: 130, fontWeight: 600, letterSpacing: "-0.04em", lineHeight: 1 }}>
+            Brian Pineda
+          </div>
+          <div style={{ marginTop: 24, fontSize: 32, color: "#6e6e73", maxWidth: 900 }}>
+            First-gen CS + EE student at Rutgers building full-stack products and
+            LLM systems with an AI-native workflow.
+          </div>
+        </div>
+
+        {/* Footer chips */}
+        <div style={{ display: "flex", gap: 14, fontFamily: "monospace", fontSize: 22 }}>
+          {["CS + EE @ Rutgers", "New Brunswick, NJ", "brianpineda.dev"].map((t, i) => (
+            <div
+              key={t}
+              style={{
+                padding: "10px 18px",
+                borderRadius: 999,
+                background: "rgba(255,255,255,0.6)",
+                border: "1px solid rgba(255,255,255,0.8)",
+                color: i === 2 ? "#0a84ff" : "#6e6e73",
+              }}
+            >
+              {t}
+            </div>
+          ))}
         </div>
       </div>
     ),

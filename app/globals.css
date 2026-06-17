@@ -4,12 +4,12 @@
 
 @layer base {
   html {
-    background-color: #0a0a0a;
-    color: #e5e5e5;
-    color-scheme: dark;
+    background-color: #f4f4f6;
+    color: #1d1d1f;
+    color-scheme: light;
     scroll-behavior: smooth;
-    /* Keep anchored sections clear of the fixed 56px nav. */
-    scroll-padding-top: 5rem;
+    /* Keep anchored sections clear of the floating nav. */
+    scroll-padding-top: 6.5rem;
   }
   body {
     font-feature-settings: "ss01", "cv11";
@@ -18,29 +18,28 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background-color: #5eead4;
-    color: #0a0a0a;
+    background-color: #0a84ff;
+    color: #ffffff;
   }
   ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 11px;
+    height: 11px;
   }
   ::-webkit-scrollbar-track {
-    background: #0a0a0a;
+    background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1f1f1f;
-    border-radius: 6px;
-    border: 2px solid #0a0a0a;
+    background: #c7c7d1;
+    border-radius: 8px;
+    border: 3px solid #f4f4f6;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #2a2a2a;
+    background: #a9a9b6;
   }
   * {
-    scrollbar-color: #1f1f1f #0a0a0a;
+    scrollbar-color: #c7c7d1 transparent;
     scrollbar-width: thin;
   }
-  /* Respect users who ask for less motion: no fade-up, ping, or smooth scroll. */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -58,28 +57,57 @@
   }
 }
 
+@layer components {
+  /* Frosted-glass surface — translucent white, blur, hairline, soft shadow. */
+  .glass {
+    background-color: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 1px 1px rgba(0, 0, 0, 0.02),
+      0 8px 24px -12px rgba(20, 20, 40, 0.18);
+  }
+  /* Heavier glass for the floating nav bar. */
+  .glass-bar {
+    background-color: rgba(255, 255, 255, 0.62);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      0 8px 30px -10px rgba(20, 20, 40, 0.22);
+  }
+}
+
 @layer utilities {
-  .dot-grid {
-    background-image: radial-gradient(rgba(94, 234, 212, 0.10) 1px, transparent 1px);
-    background-size: 28px 28px;
-    background-position: center;
-    -webkit-mask-image: radial-gradient(ellipse at 30% 30%, black 35%, transparent 75%);
-            mask-image: radial-gradient(ellipse at 30% 30%, black 35%, transparent 75%);
-  }
-  .noise-grain {
-    position: fixed;
-    inset: 0;
+  /* Soft colored gradient blobs behind the glass (the "aurora"). */
+  .aurora {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(70px);
+    opacity: 0.55;
     pointer-events: none;
-    z-index: 60;
-    mix-blend-mode: overlay;
-    opacity: 0.06;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.6 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-    background-size: 240px 240px;
   }
-  .stagger-1 { animation-delay: 80ms; }
-  .stagger-2 { animation-delay: 160ms; }
-  .stagger-3 { animation-delay: 240ms; }
-  .stagger-4 { animation-delay: 320ms; }
-  .stagger-5 { animation-delay: 400ms; }
-  .stagger-6 { animation-delay: 480ms; }
+  .grid-faint {
+    background-image:
+      linear-gradient(to right, rgba(20, 20, 40, 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(20, 20, 40, 0.035) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 72%);
+            mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 72%);
+  }
+  .text-gradient {
+    background-image: linear-gradient(120deg, #0a84ff 0%, #6d5bd0 48%, #1eb6a0 100%);
+    -webkit-background-clip: text;
+            background-clip: text;
+    color: transparent;
+  }
+  .stagger-1 { animation-delay: 90ms; }
+  .stagger-2 { animation-delay: 180ms; }
+  .stagger-3 { animation-delay: 270ms; }
+  .stagger-4 { animation-delay: 360ms; }
+  .stagger-5 { animation-delay: 450ms; }
+  .stagger-6 { animation-delay: 540ms; }
 }
