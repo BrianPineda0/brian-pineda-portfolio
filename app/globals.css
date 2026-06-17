@@ -7,6 +7,9 @@
     background-color: #0a0a0a;
     color: #e5e5e5;
     color-scheme: dark;
+    scroll-behavior: smooth;
+    /* Keep anchored sections clear of the fixed 56px nav. */
+    scroll-padding-top: 5rem;
   }
   body {
     font-feature-settings: "ss01", "cv11";
@@ -36,6 +39,22 @@
   * {
     scrollbar-color: #1f1f1f #0a0a0a;
     scrollbar-width: thin;
+  }
+  /* Respect users who ask for less motion: no fade-up, ping, or smooth scroll. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+    .opacity-0 {
+      opacity: 1 !important;
+    }
   }
 }
 

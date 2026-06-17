@@ -54,6 +54,8 @@ type Project = {
   blurb: string;
   stack: string[];
   featured?: boolean;
+  /** Optional repo or live URL. When set, the card becomes clickable. */
+  link?: string;
 };
 
 const PROJECTS: Project[] = [
@@ -342,8 +344,10 @@ function Hero() {
 }
 
 function FeaturedCard({ project }: { project: Project }) {
-  return (
-    <article className="group relative border border-line bg-panel/40 hover:border-accent transition-all duration-300 hover:-translate-y-1">
+  const className =
+    "group relative border border-line bg-panel/40 hover:border-accent transition-all duration-300 hover:-translate-y-1 block";
+  const inner = (
+    <>
       <div className="absolute top-0 right-0 z-10">
         <div className="font-mono text-[10px] tracking-[0.22em] bg-accent text-ink px-3 py-1.5">
           FEATURED
@@ -368,6 +372,12 @@ function FeaturedCard({ project }: { project: Project }) {
               <StackPill key={s}>{s}</StackPill>
             ))}
           </div>
+          {project.link ? (
+            <div className="mt-7 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-mute group-hover:text-accent transition-colors">
+              View project
+              <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </div>
+          ) : null}
         </div>
         <div className="lg:col-span-5 hidden lg:flex items-end justify-end">
           <div className="relative w-full aspect-square max-w-md">
@@ -390,13 +400,22 @@ function FeaturedCard({ project }: { project: Project }) {
           </div>
         </div>
       </div>
-    </article>
+    </>
+  );
+  return project.link ? (
+    <a href={project.link} target="_blank" rel="noreferrer noopener" className={className}>
+      {inner}
+    </a>
+  ) : (
+    <article className={className}>{inner}</article>
   );
 }
 
 function ProjectCard({ project }: { project: Project }) {
-  return (
-    <article className="group relative border border-line bg-panel/30 hover:border-accent transition-all duration-300 hover:-translate-y-1 p-7 md:p-8 flex flex-col">
+  const className =
+    "group relative border border-line bg-panel/30 hover:border-accent transition-all duration-300 hover:-translate-y-1 p-7 md:p-8 flex flex-col";
+  const inner = (
+    <>
       <div className="font-mono text-[11px] tracking-[0.18em] uppercase text-accent">
         {project.category}
       </div>
@@ -414,11 +433,20 @@ function ProjectCard({ project }: { project: Project }) {
           <StackPill key={s}>{s}</StackPill>
         ))}
       </div>
-      <div className="mt-6 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-mute group-hover:text-accent transition-colors">
-        Case study
-        <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-      </div>
-    </article>
+      {project.link ? (
+        <div className="mt-6 inline-flex items-center gap-1.5 font-mono text-[10px] tracking-[0.18em] uppercase text-mute group-hover:text-accent transition-colors">
+          View project
+          <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </div>
+      ) : null}
+    </>
+  );
+  return project.link ? (
+    <a href={project.link} target="_blank" rel="noreferrer noopener" className={className}>
+      {inner}
+    </a>
+  ) : (
+    <article className={className}>{inner}</article>
   );
 }
 
