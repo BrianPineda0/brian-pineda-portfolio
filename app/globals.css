@@ -2,10 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   THEME TOKENS — color tokens in tailwind.config.ts resolve to these vars.
+   :root is the default light "Overworld" palette (visually unchanged).
+   The [data-theme] blocks are DORMANT scaffolding for a theme switcher that
+   is not built yet (see CREATIVE-FLAIR.md). Nothing sets data-theme today.
+   --------------------------------------------------------------------------- */
+:root {
+  --c-canvas: 244 244 246;
+  --c-surface: 255 255 255;
+  --c-ink: 29 29 31;
+  --c-slate: 110 110 115;
+  --c-line: 217 217 224;
+  --c-brand: 10 132 255;
+  --c-grape: 109 91 208;
+  --c-mint: 30 182 160;
+  --c-amber: 245 166 35;
+}
+[data-theme="abyss"] {
+  --c-canvas: 11 16 32;
+  --c-surface: 20 26 46;
+  --c-ink: 232 236 248;
+  --c-slate: 151 160 192;
+  --c-line: 35 42 64;
+  --c-brand: 127 214 230;
+  --c-grape: 157 140 255;
+  --c-mint: 95 224 200;
+  --c-amber: 245 196 81;
+}
+[data-theme="erdtree"] {
+  --c-canvas: 21 18 11;
+  --c-surface: 34 28 16;
+  --c-ink: 243 231 201;
+  --c-slate: 185 168 127;
+  --c-line: 58 49 32;
+  --c-brand: 216 180 106;
+  --c-grape: 200 155 90;
+  --c-mint: 205 178 95;
+  --c-amber: 231 200 115;
+}
+[data-theme="abyss"],
+[data-theme="erdtree"] {
+  color-scheme: dark;
+}
+
 @layer base {
   html {
-    background-color: #f4f4f6;
-    color: #1d1d1f;
+    background-color: rgb(var(--c-canvas));
+    color: rgb(var(--c-ink));
     color-scheme: light;
     scroll-behavior: smooth;
     /* Keep anchored sections clear of the floating nav. */

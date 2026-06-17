@@ -5,16 +5,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Light "Apple" palette — soft gray canvas, near-black ink, hairline lines.
-        canvas: "#f4f4f6", // page background
-        surface: "#ffffff", // solid card surface
-        ink: "#1d1d1f", // primary text (Apple near-black)
-        slate: "#6e6e73", // secondary text
-        line: "#d9d9e0", // hairline borders / dividers
-        brand: "#0a84ff", // primary blue accent
-        grape: "#6d5bd0", // secondary purple
-        mint: "#1eb6a0", // teal pop (nods to the old accent)
-        amber: "#f5a623",
+        // Tokens resolve to CSS variables so themes (see globals.css :root /
+        // [data-theme=...]) can swap the whole palette at runtime. Default
+        // (no data-theme) is the light "Apple" palette, unchanged.
+        canvas: "rgb(var(--c-canvas) / <alpha-value>)", // page background
+        surface: "rgb(var(--c-surface) / <alpha-value>)", // solid card surface
+        ink: "rgb(var(--c-ink) / <alpha-value>)", // primary text
+        slate: "rgb(var(--c-slate) / <alpha-value>)", // secondary text
+        line: "rgb(var(--c-line) / <alpha-value>)", // hairline borders
+        brand: "rgb(var(--c-brand) / <alpha-value>)", // primary accent
+        grape: "rgb(var(--c-grape) / <alpha-value>)", // secondary accent
+        mint: "rgb(var(--c-mint) / <alpha-value>)", // tertiary pop
+        amber: "rgb(var(--c-amber) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "-apple-system", "sans-serif"],
