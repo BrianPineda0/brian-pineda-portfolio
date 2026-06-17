@@ -74,7 +74,7 @@ export default function OpengraphImage() {
 
         {/* Footer chips */}
         <div style={{ display: "flex", gap: 14, fontFamily: "monospace", fontSize: 22 }}>
-          {["CS + EE @ Rutgers", "New Brunswick, NJ", "brianpineda.dev"].map((t, i) => (
+          {["CS + EE @ Rutgers", "New Brunswick, NJ", "Open to internships"].map((t, i) => (
             <div
               key={t}
               style={{
