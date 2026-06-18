@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import Image from "next/image";
+import AvatarFlip from "./AvatarFlip";
 import Interactive from "./Interactive";
 import LiquidGlass from "./LiquidGlass";
 import Terminal from "./Terminal";
@@ -372,10 +373,7 @@ function Hero() {
                 data-bevel="0.18"
                 data-intensity="0.45"
               >
-                <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center overflow-hidden rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
-                  <span className="text-6xl font-semibold tracking-tight text-white">BP</span>
-                  <span className="shimmer-sheen" aria-hidden="true" />
-                </div>
+                <AvatarFlip />
                 <div className="mt-6 grid grid-cols-2 gap-2.5">
                   {HERO_STATS.map((s) => (
                     <div
