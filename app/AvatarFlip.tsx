@@ -32,32 +32,37 @@ type Face = { caption: string; render: React.ReactNode };
 // The fallback shows until a real file actually loads, so there's no broken
 // image while the asset is missing.
 function RutgersFace() {
-  const [loaded, setLoaded] = useState(false);
+  // Show the real logo by default; only fall back to the styled "R" if the image
+  // genuinely fails to load. (It used to gate on an onLoad `loaded` flag, which
+  // reset whenever this face remounted while the tile cycled — so during a flip
+  // it would flash the styled fallback even though the picture was available.)
+  const [failed, setFailed] = useState(false);
   return (
     <div
       className="relative grid h-full w-full place-items-center"
       style={{ backgroundColor: "#cf1230" }}
     >
-      <div className={`flex flex-col items-center ${loaded ? "invisible" : ""}`}>
-        <span
-          className="text-[5rem] font-black leading-none text-white"
-          style={{ WebkitTextStroke: "5px #7a0020", paintOrder: "stroke" }}
-        >
-          R
-        </span>
-        <span className="mt-3 font-mono text-[10px] font-semibold uppercase tracking-[0.34em] text-white/85">
-          Rutgers
-        </span>
-      </div>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/rutgers.png"
-        alt="Rutgers"
-        onLoad={() => setLoaded(true)}
-        className={`absolute inset-0 h-full w-full object-cover p-2.5 transition-opacity ${
-          loaded ? "opacity-100" : "opacity-0"
-        }`}
-      />
+      {failed ? (
+        <div className="flex flex-col items-center">
+          <span
+            className="text-[5rem] font-black leading-none text-white"
+            style={{ WebkitTextStroke: "5px #7a0020", paintOrder: "stroke" }}
+          >
+            R
+          </span>
+          <span className="mt-3 font-mono text-[10px] font-semibold uppercase tracking-[0.34em] text-white/85">
+            Rutgers
+          </span>
+        </div>
+      ) : (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img
+          src="/rutgers.png"
+          alt="Rutgers"
+          onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover p-2.5"
+        />
+      )}
       <span className="shimmer-sheen" aria-hidden="true" />
     </div>
   );

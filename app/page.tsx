@@ -229,14 +229,14 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 function Nav() {
   return (
-    <header className="fixed inset-x-0 top-4 z-50 px-4">
+    <header className="fixed inset-x-0 top-4 z-50 px-2 sm:px-4">
       <div
-        className="mx-auto flex max-w-3xl items-center justify-between gap-3 rounded-full glass-bar refract px-3 py-2 pl-4"
+        className="mx-auto flex max-w-3xl items-center justify-center gap-1.5 rounded-full glass-bar refract px-1.5 py-2 sm:justify-between sm:gap-3 sm:px-3 sm:pl-4"
         data-tilt="5"
         data-bevel="0.5"
         data-intensity="0.85"
       >
-        <a href="#top" className="group flex items-center gap-2">
+        <a href="#top" className="group hidden items-center gap-2 sm:flex">
           <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-br from-brand via-grape to-mint text-[10px] font-bold text-white">
             BP
           </span>
@@ -244,7 +244,7 @@ function Nav() {
             {PROFILE.firstName} {PROFILE.lastName}
           </span>
         </a>
-        <nav className="relative flex items-center gap-0.5">
+        <nav className="relative flex items-center gap-0 sm:gap-0.5">
           {/* Pill that slides under the active link as you scroll (Interactive.tsx). */}
           <span
             data-nav-indicator
@@ -257,7 +257,7 @@ function Nav() {
               key={link.href}
               href={link.href}
               data-navlink
-              className="relative z-10 rounded-full px-3 py-1.5 text-[13px] text-slate transition-colors hover:text-ink"
+              className="relative z-10 rounded-full px-1.5 py-1.5 text-[12px] text-slate transition-colors hover:text-ink sm:px-3 sm:text-[13px]"
             >
               {link.label}
             </a>
