@@ -226,10 +226,10 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 500px;
-  height: 500px;
-  margin-left: -250px;
-  margin-top: -250px;
+  width: 280px;
+  height: 280px;
+  margin-left: -140px;
+  margin-top: -140px;
   border-radius: 9999px;
   pointer-events: none;
   z-index: -8;
@@ -239,7 +239,7 @@
     rgb(var(--c-brand) / 0.18) 35%,
     transparent 70%
   );
-  filter: blur(40px);
+  filter: blur(28px);
   opacity: 0;
   transition: opacity 0.45s ease;
   will-change: transform;
