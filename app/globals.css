@@ -216,6 +216,28 @@
   80%, 100% { transform: translateX(60%); }
 }
 
+/* FLIP AVATAR TILE — keep the rounded corners clipped through the 3D flip on
+   mobile Safari/Chrome. There, overflow:hidden + border-radius can drop the
+   clip mid-rotation on the GPU layer and flash square (black) corners; clip-path
+   holds through transforms, and -webkit-backface-visibility stops backface
+   bleed-through. */
+.flip-scene {
+  -webkit-perspective: 1000px;
+          perspective: 1000px;
+}
+.flip-3d {
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+}
+.flip-face {
+  border-radius: 2.4rem;
+  overflow: hidden;
+  -webkit-clip-path: inset(0 round 2.4rem);
+          clip-path: inset(0 round 2.4rem);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
 /* --- Interactivity (progressively enhanced by app/Interactive.tsx) --- */
 
 /* Always-on blue glow that trails the cursor. It sits BEHIND the content

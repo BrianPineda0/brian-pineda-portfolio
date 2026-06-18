@@ -421,10 +421,10 @@ export default function AvatarFlip() {
           pausedRef.current = false;
         }}
         aria-label={`Brian Pineda — ${FACES[labelIdx].caption}. Click to flip.`}
-        className="group relative mx-auto block h-44 w-44 animate-float cursor-pointer rounded-[2.4rem] shadow-glass-lg outline-none [perspective:1000px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
+        className="group flip-scene relative mx-auto block h-44 w-44 animate-float cursor-pointer rounded-[2.4rem] shadow-glass-lg outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2"
       >
         <div
-          className="relative h-full w-full rounded-[2.4rem] [transform-style:preserve-3d]"
+          className="flip-3d relative h-full w-full rounded-[2.4rem]"
           style={{
             transform: `rotateY(${rot}deg)`,
             transition: reduced
@@ -432,10 +432,10 @@ export default function AvatarFlip() {
               : `transform ${FLIP_MS}ms ${FLIP_EASE}`,
           }}
         >
-          <div className="absolute inset-0 overflow-hidden rounded-[2.4rem] ring-1 ring-inset ring-black/10 [backface-visibility:hidden]">
+          <div className="absolute inset-0 flip-face ring-1 ring-inset ring-black/10">
             {FACES[frontIdx].render}
           </div>
-          <div className="absolute inset-0 overflow-hidden rounded-[2.4rem] ring-1 ring-inset ring-black/10 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div className="absolute inset-0 flip-face ring-1 ring-inset ring-black/10 [transform:rotateY(180deg)]">
             {FACES[backIdx].render}
           </div>
         </div>
