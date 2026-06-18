@@ -11,7 +11,10 @@ import {
   MapPin,
   Sparkles,
 } from "lucide-react";
+import Image from "next/image";
 import Interactive from "./Interactive";
+import LiquidGlass from "./LiquidGlass";
+import Terminal from "./Terminal";
 
 // ---------------------------------------------------------------------------
 // CONTENT — everything the page shows lives here, in plain data. The components
@@ -21,7 +24,7 @@ import Interactive from "./Interactive";
 const PROFILE = {
   firstName: "Brian",
   lastName: "Pineda",
-  greeting: "Hi, I'm Brian",
+  greeting: "Hi, I'm",
   tagline: "CS + EE @ Rutgers · first-gen builder",
   location: "New Brunswick, NJ",
   email: "brian.pineda.work@gmail.com",
@@ -30,7 +33,8 @@ const PROFILE = {
   linkedin: "https://www.linkedin.com/in/brianepineda",
   linkedinHandle: "brianepineda",
   resume: "/resume.pdf",
-  availability: "Open to Summer 2026 internships",
+  resumeImage: "/resume.png",
+  availability: "Building things that ship",
   currently:
     "building LLM platforms & data pipelines with an AI-native workflow",
   // First-person intro. Pieces marked { strong } render in solid ink.
@@ -51,8 +55,15 @@ const PROFILE = {
   ],
 } as const;
 
-const HERO_STATS = [
-  { k: "GPA", v: "3.8 / 4.0" },
+// `num`/`dec`/`suffix` opt a stat into the count-up animation (Interactive.tsx).
+const HERO_STATS: {
+  k: string;
+  v: string;
+  num?: number;
+  dec?: number;
+  suffix?: string;
+}[] = [
+  { k: "GPA", v: "3.8 / 4.0", num: 3.8, dec: 1, suffix: " / 4.0" },
   { k: "Status", v: "Dean's List" },
   { k: "Grad", v: "May 2029" },
   { k: "Focus", v: "AI / ML · Full-stack" },
@@ -101,6 +112,8 @@ type Project = {
   featured?: boolean;
   /** Optional repo or live URL. When set, the card becomes clickable. */
   link?: string;
+  /** Optional live URL to embed as a small browser-window preview. */
+  preview?: string;
 };
 
 const PROJECTS: Project[] = [
@@ -122,6 +135,8 @@ const PROJECTS: Project[] = [
     blurb:
       "5-stage Python pipeline turning 9,497 raw scraped records into a normalized SQLite database — 3 tables, 75,000+ rows. Cross-source matching for 2,106 components using composite-key logic with validation at every stage. Driven end-to-end through Claude Code with structured context files.",
     stack: ["Python", "SQL", "SQLite", "Pandas", "Claude Code"],
+    link: "https://pc-forecaster.vercel.app/",
+    preview: "https://pc-forecaster.vercel.app/",
   },
   {
     id: "masa-rutgers",
@@ -185,11 +200,7 @@ const NAV_LINKS = [
 function Aurora() {
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      <div className="absolute inset-0 bg-canvas" />
-      <div className="aurora animate-aurora-1 h-[42rem] w-[42rem] -left-40 -top-48 bg-[#7cb6ff]" />
-      <div className="aurora animate-aurora-2 h-[38rem] w-[38rem] right-[-12rem] top-[-6rem] bg-[#c9a9ff]" />
-      <div className="aurora animate-aurora-3 h-[34rem] w-[34rem] left-1/3 top-[28rem] bg-[#7ff0dc] opacity-40" />
-      <div className="aurora animate-aurora-2 h-[30rem] w-[30rem] right-[2rem] bottom-[-8rem] bg-[#ffd9a8] opacity-40" />
+      <div className="absolute inset-0 canvas-tint" />
     </div>
   );
 }
@@ -218,7 +229,12 @@ function Chip({ children }: { children: React.ReactNode }) {
 function Nav() {
   return (
     <header className="fixed inset-x-0 top-4 z-50 px-4">
-      <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 rounded-full glass-bar px-3 py-2 pl-4">
+      <div
+        className="mx-auto flex max-w-3xl items-center justify-between gap-3 rounded-full glass-bar refract px-3 py-2 pl-4"
+        data-tilt="5"
+        data-bevel="0.5"
+        data-intensity="0.85"
+      >
         <a href="#top" className="group flex items-center gap-2">
           <span className="grid h-6 w-6 place-items-center rounded-lg bg-gradient-to-br from-brand via-grape to-mint text-[10px] font-bold text-white">
             BP
@@ -227,19 +243,27 @@ function Nav() {
             {PROFILE.firstName} {PROFILE.lastName}
           </span>
         </a>
-        <nav className="flex items-center gap-0.5">
+        <nav className="relative flex items-center gap-0.5">
+          {/* Pill that slides under the active link as you scroll (Interactive.tsx). */}
+          <span
+            data-nav-indicator
+            id="nav-indicator"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-0 top-1/2 h-7 rounded-full opacity-0 transition-all duration-300 ease-out"
+          />
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="rounded-full px-3 py-1.5 text-[13px] text-slate transition-colors hover:bg-white/70 hover:text-ink"
+              data-navlink
+              className="relative z-10 rounded-full px-3 py-1.5 text-[13px] text-slate transition-colors hover:text-ink"
             >
               {link.label}
             </a>
           ))}
           <a
             href="#resume"
-            className="ml-1 hidden items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-transform hover:-translate-y-0.5 sm:inline-flex"
+            className="ml-1 hidden items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-canvas transition-transform hover:-translate-y-0.5 sm:inline-flex"
           >
             <FileText className="h-3.5 w-3.5" />
             Résumé
@@ -253,7 +277,6 @@ function Nav() {
 function Hero() {
   return (
     <section id="top" className="relative">
-      <div className="absolute inset-0 grid-faint" aria-hidden="true" />
       <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-36 sm:px-8 md:pb-24 md:pt-44">
         <div className="grid items-center gap-12 lg:grid-cols-12">
           <div className="lg:col-span-7">
@@ -269,7 +292,7 @@ function Hero() {
 
             <h1 className="mt-6 font-semibold tracking-tight text-ink opacity-0 animate-fade-up stagger-1">
               <span className="block text-2xl font-medium text-slate sm:text-3xl">
-                {PROFILE.greeting} 👋
+                {PROFILE.greeting}
               </span>
               <span className="mt-1 block text-6xl leading-[0.95] sm:text-7xl md:text-8xl">
                 {PROFILE.firstName} {PROFILE.lastName}
@@ -291,13 +314,15 @@ function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-3 opacity-0 animate-fade-up stagger-3">
               <a
                 href="#work"
-                className="group inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-white shadow-float transition-transform hover:-translate-y-0.5"
+                data-magnetic
+                className="group inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-medium text-canvas shadow-float transition-transform hover:-translate-y-0.5"
               >
                 See my work
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </a>
               <a
                 href="#contact"
+                data-magnetic
                 className="group inline-flex items-center gap-2 rounded-full glass px-5 py-3 text-sm font-medium text-ink transition-transform hover:-translate-y-0.5"
               >
                 Get in touch
@@ -341,9 +366,15 @@ function Hero() {
           {/* Avatar card */}
           <div className="lg:col-span-5">
             <div className="relative mx-auto max-w-sm opacity-0 animate-fade-up stagger-3">
-              <div className="glass rounded-[2rem] p-6" data-tilt>
-                <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
+              <div
+                className="glass refract rounded-[2rem] p-6"
+                data-tilt="7"
+                data-bevel="0.18"
+                data-intensity="0.45"
+              >
+                <div className="relative mx-auto grid h-44 w-44 animate-float place-items-center overflow-hidden rounded-[2.4rem] bg-gradient-to-br from-brand via-grape to-mint shadow-glass-lg">
                   <span className="text-6xl font-semibold tracking-tight text-white">BP</span>
+                  <span className="shimmer-sheen" aria-hidden="true" />
                 </div>
                 <div className="mt-6 grid grid-cols-2 gap-2.5">
                   {HERO_STATS.map((s) => (
@@ -355,7 +386,16 @@ function Hero() {
                         {s.k}
                       </div>
                       <div className="mt-0.5 text-sm font-medium text-ink">
-                        {s.v}
+                        {s.num !== undefined ? (
+                          <>
+                            <span data-count={s.num} data-dec={s.dec ?? 0}>
+                              {s.num.toFixed(s.dec ?? 0)}
+                            </span>
+                            {s.suffix}
+                          </>
+                        ) : (
+                          s.v
+                        )}
                       </div>
                     </div>
                   ))}
@@ -383,13 +423,15 @@ function Section({
   return (
     <section
       id={id}
-      data-reveal
+      data-achievement={eyebrow}
       className="relative mx-auto max-w-6xl px-5 py-16 sm:px-8 md:py-24"
     >
-      <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
-        {title}
-      </h2>
+      <div data-reveal>
+        <Eyebrow>{eyebrow}</Eyebrow>
+        <h2 className="mt-4 max-w-3xl text-3xl font-semibold tracking-tight text-ink sm:text-4xl md:text-5xl">
+          {title}
+        </h2>
+      </div>
       <div className="mt-10">{children}</div>
     </section>
   );
@@ -398,8 +440,13 @@ function Section({
 function About() {
   return (
     <Section id="about" eyebrow="About" title="A student who ships real things.">
-      <div className="grid gap-6 lg:grid-cols-12">
-        <div className="glass rounded-3xl p-7 md:p-9 lg:col-span-7">
+      <div data-stagger className="grid gap-6 lg:grid-cols-12">
+        <div
+          className="glass refract rounded-3xl p-7 md:p-9 lg:col-span-7"
+          data-tilt="6"
+          data-bevel="0.2"
+          data-intensity="0.45"
+        >
           <div className="space-y-5 text-[15px] leading-relaxed text-slate">
             <p>
               I&apos;m studying Computer Science and Electrical Engineering at
@@ -427,15 +474,20 @@ function About() {
               student in tech, and I serve as{" "}
               <span className="font-medium text-ink">PR Chair at MASA Rutgers</span>{" "}
               — so I&apos;m as comfortable working with stakeholders and a
-              community as I am in the IDE. Open to Summer 2026 SWE and AI/ML
-              internships, especially anywhere LLM systems or the
-              hardware-software boundary is the interesting problem.
+              community as I am in the IDE. I&apos;m especially drawn to anywhere
+              LLM systems or the hardware-software boundary is the interesting
+              problem.
             </p>
           </div>
         </div>
 
         <div className="grid gap-6 lg:col-span-5">
-          <div className="glass rounded-3xl p-7">
+          <div
+            className="glass refract rounded-3xl p-7"
+            data-tilt="6"
+            data-bevel="0.2"
+            data-intensity="0.45"
+          >
             <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate">
               At a glance
             </div>
@@ -445,7 +497,6 @@ function About() {
                 ["School", "Rutgers University"],
                 ["Location", PROFILE.location],
                 ["Graduation", "May 2029"],
-                ["Open to", "Summer 2026 internships"],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-baseline justify-between gap-4 py-2.5">
                   <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-slate">
@@ -459,13 +510,16 @@ function About() {
           <a
             href={PROFILE.resume}
             download
-            className="group flex items-center justify-between rounded-3xl glass p-6 transition-transform hover:-translate-y-0.5"
+            className="group flex items-center justify-between rounded-3xl glass refract p-6"
+            data-tilt="6"
+            data-bevel="0.2"
+            data-intensity="0.45"
           >
             <div>
               <div className="font-medium text-ink">Grab my résumé</div>
               <div className="text-sm text-slate">One-page PDF</div>
             </div>
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-white transition-transform group-hover:-translate-y-0.5">
+            <span className="grid h-11 w-11 place-items-center rounded-full bg-ink text-canvas transition-transform group-hover:-translate-y-0.5">
               <Download className="h-4 w-4" />
             </span>
           </a>
@@ -478,19 +532,22 @@ function About() {
 function Experience() {
   return (
     <Section id="experience" eyebrow="Experience" title="Where I've been.">
-      <div className="space-y-5">
+      <div data-stagger className="space-y-5">
         {EXPERIENCE.map((item) => {
           const Icon = item.kind === "Education" ? GraduationCap : Briefcase;
           return (
             <div
               key={item.role}
-              className="glass rounded-3xl p-6 md:p-8"
-              data-spotlight
+              className="glass refract rounded-3xl p-6 md:p-8"
+              data-tilt="6"
+              data-bevel="0.2"
+              data-intensity="0.45"
             >
               <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-8">
                 <div className="flex items-center gap-3 md:w-64 md:shrink-0">
-                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand/90 to-grape/90 text-white">
+                  <span className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand/90 to-grape/90 text-white">
                     <Icon className="h-5 w-5" />
+                    <span className="shimmer-sheen" aria-hidden="true" />
                   </span>
                   <div>
                     <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
@@ -527,9 +584,50 @@ function Experience() {
   );
 }
 
+function SitePreview({ url }: { url: string }) {
+  let host = url;
+  try {
+    host = new URL(url).host;
+  } catch {
+    /* keep raw url */
+  }
+  return (
+    <div className="mt-6 overflow-hidden rounded-2xl border border-line bg-white shadow-glass">
+      {/* Faux browser chrome */}
+      <div className="flex items-center gap-2 border-b border-line bg-white/70 px-3 py-2">
+        <span className="flex gap-1.5">
+          <span className="h-2.5 w-2.5 rounded-full bg-amber" />
+          <span className="h-2.5 w-2.5 rounded-full bg-mint" />
+          <span className="h-2.5 w-2.5 rounded-full bg-brand" />
+        </span>
+        <span className="truncate font-mono text-[10px] tracking-[0.04em] text-slate">
+          {host}
+        </span>
+      </div>
+      {/* Live, responsive-scaled embed of the real site (Interactive.tsx sizes it). */}
+      <div
+        className="relative w-full overflow-hidden bg-canvas"
+        style={{ aspectRatio: "16 / 10" }}
+      >
+        <iframe
+          src={url}
+          title={`Live preview of ${host}`}
+          loading="lazy"
+          tabIndex={-1}
+          aria-hidden="true"
+          data-embed
+          data-embed-w="1280"
+          className="pointer-events-none absolute left-0 top-0 origin-top-left border-0"
+          style={{ width: "1280px", height: "800px", transform: "scale(0.38)" }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function ProjectCard({ project }: { project: Project }) {
   const featured = project.featured;
-  const className = `group glass rounded-3xl p-7 md:p-8 transition-transform hover:-translate-y-1 ${
+  const className = `group relative glass refract rounded-3xl p-7 md:p-8 ${
     featured ? "md:col-span-2" : ""
   } flex flex-col`;
   const inner = (
@@ -547,8 +645,9 @@ function ProjectCard({ project }: { project: Project }) {
             {project.name}
           </h3>
         </div>
-        <span className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-brand via-grape to-mint text-xl font-bold text-white">
+        <span className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand via-grape to-mint text-xl font-bold text-white">
           {project.name.charAt(0)}
+          <span className="shimmer-sheen" aria-hidden="true" />
         </span>
       </div>
       <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-slate">
@@ -566,6 +665,7 @@ function ProjectCard({ project }: { project: Project }) {
           <Chip key={s}>{s}</Chip>
         ))}
       </div>
+      {project.preview ? <SitePreview url={project.preview} /> : null}
       {project.link ? (
         <div className="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-brand">
           View project
@@ -574,19 +674,25 @@ function ProjectCard({ project }: { project: Project }) {
       ) : null}
     </>
   );
-  return project.link ? (
-    <a
-      href={project.link}
-      target="_blank"
-      rel="noreferrer noopener"
+  return (
+    <article
       className={className}
-      data-spotlight
+      data-tilt="6"
+      data-bevel="0.18"
+      data-intensity="0.45"
     >
       {inner}
-    </a>
-  ) : (
-    <article className={className} data-spotlight>
-      {inner}
+      {/* Stretched link: the whole card is clickable, but the anchor stays a
+          sibling of the iframe (valid HTML — <a> can't wrap an <iframe>). */}
+      {project.link ? (
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label={`Open ${project.name}`}
+          className="absolute inset-0 z-20 rounded-3xl"
+        />
+      ) : null}
     </article>
   );
 }
@@ -594,7 +700,7 @@ function ProjectCard({ project }: { project: Project }) {
 function Work() {
   return (
     <Section id="work" eyebrow="Projects" title="Things I've shipped.">
-      <div className="grid gap-6 md:grid-cols-2">
+      <div data-stagger className="grid items-start gap-6 md:grid-cols-2">
         {PROJECTS.map((p) => (
           <ProjectCard key={p.id} project={p} />
         ))}
@@ -606,9 +712,15 @@ function Work() {
 function Stack() {
   return (
     <Section id="stack" eyebrow="Skills" title="Tools I reach for.">
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div data-stagger className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {STACK_CATEGORIES.map((cat) => (
-          <div key={cat.label} className="glass rounded-3xl p-6" data-spotlight>
+          <div
+            key={cat.label}
+            className="glass refract rounded-3xl p-6"
+            data-tilt="5"
+            data-bevel="0.22"
+            data-intensity="0.45"
+          >
             <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-brand">
               {cat.label}
             </div>
@@ -645,12 +757,15 @@ function ContactCard({
     <a
       href={href}
       {...(isExternal ? { target: "_blank", rel: "noreferrer noopener" } : {})}
-      className="group glass flex flex-col rounded-3xl p-6 transition-transform hover:-translate-y-1"
-      data-spotlight
+      className="group glass refract flex flex-col rounded-3xl p-6"
+      data-tilt="6"
+      data-bevel="0.3"
+      data-intensity="0.6"
     >
       <div className="flex items-center justify-between">
-        <span className="grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br from-brand to-grape text-white">
+        <span className="relative grid h-11 w-11 place-items-center overflow-hidden rounded-2xl bg-gradient-to-br from-brand to-grape text-white">
           <Icon className="h-5 w-5" />
+          <span className="shimmer-sheen" aria-hidden="true" />
         </span>
         <ArrowUpRight className="h-4 w-4 text-slate transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-brand" />
       </div>
@@ -667,8 +782,14 @@ function ContactCard({
 function Resume() {
   return (
     <Section id="resume" eyebrow="Résumé" title="The one-pager.">
-      <div className="glass-clear rounded-3xl p-3 sm:p-4">
-        <div className="flex items-center justify-between gap-3 px-2 py-2">
+      <div
+        data-reveal
+        className="glass-clear refract mx-auto max-w-2xl rounded-[1.75rem] p-4 sm:p-6"
+        data-tilt="4"
+        data-bevel="0.16"
+        data-intensity="0.4"
+      >
+        <div className="flex items-center justify-between gap-3 px-1.5 py-1">
           <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-slate">
             <FileText className="h-4 w-4 text-brand" />
             resume.pdf
@@ -686,32 +807,31 @@ function Resume() {
             <a
               href={PROFILE.resume}
               download
-              className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-white transition-transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-1.5 rounded-full bg-ink px-3.5 py-1.5 text-[13px] font-medium text-canvas transition-transform hover:-translate-y-0.5"
             >
               <Download className="h-3.5 w-3.5" />
               Download
             </a>
           </div>
         </div>
-        <div className="mt-2 overflow-hidden rounded-2xl border border-line bg-white">
-          <iframe
-            src={`${PROFILE.resume}#view=FitH`}
-            title="Brian Pineda résumé"
-            className="h-[78vh] min-h-[520px] w-full"
-            loading="lazy"
+        <a
+          href={PROFILE.resume}
+          target="_blank"
+          rel="noreferrer noopener"
+          aria-label="Open résumé PDF in a new tab"
+          className="block mt-3 overflow-hidden rounded-2xl border border-line bg-white shadow-glass"
+        >
+          <Image
+            src={PROFILE.resumeImage}
+            alt="Brian Pineda résumé"
+            width={1530}
+            height={1980}
+            priority
+            className="h-auto w-full"
           />
-        </div>
-        <p className="px-2 pt-3 text-center text-xs text-slate sm:hidden">
-          Not rendering on mobile?{" "}
-          <a
-            href={PROFILE.resume}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="font-medium text-brand underline"
-          >
-            Open the PDF in a new tab
-          </a>
-          .
+        </a>
+        <p className="px-2 pt-3 text-center text-xs text-slate">
+          Click the résumé to open the full PDF, or use Download above.
         </p>
       </div>
     </Section>
@@ -723,10 +843,10 @@ function Contact() {
     <Section id="contact" eyebrow="Contact" title="Let's build something.">
       <p className="-mt-4 max-w-xl text-[15px] leading-relaxed text-slate">
         Email is the fastest way to reach me — I read every message and reply
-        within a day or two, usually faster if it&apos;s about an internship,
-        hackathon, or an interesting LLM problem.
+        within a day or two, usually faster if it&apos;s about a hackathon, a
+        collaboration, or an interesting LLM problem.
       </p>
-      <div className="mt-8 grid gap-5 sm:grid-cols-3">
+      <div data-stagger className="mt-8 grid gap-5 sm:grid-cols-3">
         <ContactCard
           icon={Mail}
           label="Email"
@@ -756,8 +876,7 @@ function Footer() {
     <footer className="mx-auto max-w-6xl px-5 pb-12 pt-6 sm:px-8">
       <div className="glass flex flex-col items-start justify-between gap-4 rounded-3xl px-6 py-5 sm:flex-row sm:items-center">
         <div className="text-sm text-slate">
-          © {year} {PROFILE.firstName} {PROFILE.lastName} · Built with Next.js,
-          Tailwind & a lot of coffee.
+          © {year} {PROFILE.firstName} {PROFILE.lastName}
         </div>
         <div className="flex items-center gap-3">
           <a
@@ -811,6 +930,14 @@ export default function Page() {
         <Footer />
       </main>
       <Interactive />
+      <LiquidGlass />
+      <Terminal
+        profile={PROFILE}
+        projects={PROJECTS}
+        stack={STACK_CATEGORIES}
+        experience={EXPERIENCE}
+        navLinks={NAV_LINKS}
+      />
     </>
   );
 }

@@ -57,7 +57,7 @@ export default function OpengraphImage() {
             }}
           >
             <div style={{ width: 12, height: 12, borderRadius: 999, background: "#1eb6a0" }} />
-            Open to Summer 2026 internships
+            Building things that ship
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export default function OpengraphImage() {
 
         {/* Footer chips */}
         <div style={{ display: "flex", gap: 14, fontFamily: "monospace", fontSize: 22 }}>
-          {["CS + EE @ Rutgers", "New Brunswick, NJ", "Open to internships"].map((t, i) => (
+          {["CS + EE @ Rutgers", "New Brunswick, NJ", "AI-Native Builder"].map((t, i) => (
             <div
               key={t}
               style={{

@@ -9,7 +9,7 @@
    is not built yet (see CREATIVE-FLAIR.md). Nothing sets data-theme today.
    --------------------------------------------------------------------------- */
 :root {
-  --c-canvas: 244 244 246;
+  --c-canvas: 246 248 253;
   --c-surface: 255 255 255;
   --c-ink: 29 29 31;
   --c-slate: 110 110 115;
@@ -18,6 +18,14 @@
   --c-grape: 109 91 208;
   --c-mint: 30 182 160;
   --c-amber: 245 166 35;
+  /* Surface/effect tints — swapped per theme (rgb triplets, alpha applied inline). */
+  --glass-tint: 255 255 255;
+  --glass-line: 255 255 255;
+  --grid-line: 74 86 112;
+  --aurora-1: #7cb6ff;
+  --aurora-2: #c9a9ff;
+  --aurora-3: #7ff0dc;
+  --aurora-4: #ffd9a8;
 }
 [data-theme="abyss"] {
   --c-canvas: 11 16 32;
@@ -29,6 +37,13 @@
   --c-grape: 157 140 255;
   --c-mint: 95 224 200;
   --c-amber: 245 196 81;
+  --glass-tint: 70 84 122;
+  --glass-line: 130 150 200;
+  --grid-line: 150 170 225;
+  --aurora-1: #20407a;
+  --aurora-2: #3a2f7a;
+  --aurora-3: #136a5e;
+  --aurora-4: #2a4a7a;
 }
 [data-theme="erdtree"] {
   --c-canvas: 21 18 11;
@@ -40,6 +55,13 @@
   --c-grape: 200 155 90;
   --c-mint: 205 178 95;
   --c-amber: 231 200 115;
+  --glass-tint: 74 62 38;
+  --glass-line: 190 160 100;
+  --grid-line: 205 178 110;
+  --aurora-1: #6a5418;
+  --aurora-2: #7a4a18;
+  --aurora-3: #5a4a1a;
+  --aurora-4: #8a6520;
 }
 [data-theme="abyss"],
 [data-theme="erdtree"] {
@@ -62,8 +84,8 @@
     text-rendering: optimizeLegibility;
   }
   ::selection {
-    background-color: #0a84ff;
-    color: #ffffff;
+    background-color: rgb(var(--c-brand));
+    color: rgb(var(--c-canvas));
   }
   ::-webkit-scrollbar {
     width: 11px;
@@ -73,15 +95,15 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #c7c7d1;
+    background: rgb(var(--c-line));
     border-radius: 8px;
-    border: 3px solid #f4f4f6;
+    border: 3px solid rgb(var(--c-canvas));
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #a9a9b6;
+    background: rgb(var(--c-slate));
   }
   * {
-    scrollbar-color: #c7c7d1 transparent;
+    scrollbar-color: rgb(var(--c-line)) transparent;
     scrollbar-width: thin;
   }
   @media (prefers-reduced-motion: reduce) {
@@ -102,67 +124,137 @@
 }
 
 @layer components {
-  /* Frosted-glass surface — translucent white, blur, hairline, soft shadow. */
-  .glass {
-    background-color: rgba(255, 255, 255, 0.55);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.7);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.6),
-      0 1px 1px rgba(0, 0, 0, 0.02),
-      0 8px 24px -12px rgba(20, 20, 40, 0.18);
-  }
-  /* Heavier glass for the floating nav bar. */
-  .glass-bar {
-    background-color: rgba(255, 255, 255, 0.62);
-    backdrop-filter: blur(22px) saturate(180%);
-    -webkit-backdrop-filter: blur(22px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.7),
-      0 8px 30px -10px rgba(20, 20, 40, 0.22);
-  }
-  /* Clearer, more see-through glass for accents (chips, tiles, frames). */
+  /* ============================================================
+     LIQUID GLASS — near-clear tint, top-lit hairline rim, soft float shadow.
+     .glass / .glass-bar / .glass-clear share ONE material so every existing
+     surface picks it up. The cursor-tracked blue glint (::before) + the shine
+     sweep (.glass-shine, injected by LiquidGlass.tsx) live just below. Adding
+     .refract to a surface additionally gives it a per-element SVG displacement
+     map (the real edge lensing), set as an inline backdrop-filter by the script.
+     ============================================================ */
+  .glass,
+  .glass-bar,
   .glass-clear {
-    background-color: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(26px) saturate(180%);
-    -webkit-backdrop-filter: blur(26px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.55);
+    position: relative;
+    background: rgba(255, 255, 255, 0.045);
+    -webkit-backdrop-filter: blur(2px) saturate(1.5) brightness(1) contrast(1.05);
+            backdrop-filter: blur(2px) saturate(1.5) brightness(1) contrast(1.05);
     box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.5),
-      0 8px 24px -14px rgba(20, 20, 40, 0.16);
+      0 24px 56px rgba(18, 28, 54, 0.2),
+      0 5px 14px rgba(18, 28, 54, 0.1),
+      inset 0 0 0 0.6px rgba(64, 86, 150, 0.1),
+      inset 0 1px 1px rgba(255, 255, 255, 0.9),
+      inset 0 -12px 26px rgba(255, 255, 255, 0.05);
+    isolation: isolate;
+    overflow: hidden;
   }
 }
 
-/* --- Interactivity (progressively enhanced by app/Interactive.tsx) --- */
-
-/* Pointer spotlight that follows the cursor across a card. */
-[data-spotlight] {
-  position: relative;
-}
-[data-spotlight]::after {
+/* GLINT (blue light that follows the cursor) + a soft static corner sheen. */
+.glass::before,
+.glass-bar::before,
+.glass-clear::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    240px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(10, 132, 255, 0.16),
-    transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  z-index: -1;
   pointer-events: none;
-  z-index: 0;
+  background:
+    radial-gradient(circle 240px at var(--mx, 30%) var(--my, 10%), rgba(140, 170, 255, 0.42), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 24%);
 }
-[data-spotlight] > * {
-  position: relative;
-  z-index: 1;
+/* RIM: top-lit hairline — bright top, faint sides/bottom. */
+.glass::after,
+.glass-bar::after,
+.glass-clear::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.4) 10%,
+    rgba(255, 255, 255, 0.14) 48%,
+    rgba(255, 255, 255, 0.28) 100%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  pointer-events: none;
 }
-[data-spotlight]:hover::after {
+/* SHINE SWEEP — a diagonal light line that travels across each widget. */
+.glass-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.45) 50%, transparent 62%);
+  transform: translateX(-120%);
+  animation: glassShine 7s ease-in-out infinite;
+  animation-delay: var(--shine-delay, 0s);
+}
+@keyframes glassShine {
+  0%, 55% { transform: translateX(-120%); }
+  80%, 100% { transform: translateX(120%); }
+}
+/* Moving sheen kept on the gradient accent squares (BP, project badges, icons). */
+.shimmer-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.5) 50%, transparent 65%);
+  transform: translateX(-60%);
+  animation: shimmer 6s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 60% { transform: translateX(-60%); }
+  80%, 100% { transform: translateX(60%); }
+}
+
+/* --- Interactivity (progressively enhanced by app/Interactive.tsx) --- */
+
+/* Always-on blue glow that trails the cursor. It sits BEHIND the content
+   (above the aurora, below everything else), so it lights up the clear glass
+   in the foreground and pools softly in open space — without tinting the page
+   or the text on top of it. Created by Interactive.tsx. */
+#cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 500px;
+  height: 500px;
+  margin-left: -250px;
+  margin-top: -250px;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: -8;
+  background: radial-gradient(
+    circle,
+    rgb(var(--c-brand) / 0.45) 0%,
+    rgb(var(--c-brand) / 0.18) 35%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  will-change: transform;
+}
+#cursor-glow.is-on {
   opacity: 1;
 }
+@media (prefers-reduced-motion: reduce) {
+  #cursor-glow {
+    display: none;
+  }
+}
+
+/* (The old [data-spotlight] hover glint was replaced by the liquid-glass
+   per-element cursor glint in .glass::before, driven by LiquidGlass.tsx.) */
 
 /* Scroll reveal — only engages once JS adds .js-reveal, so no-JS shows content. */
 .js-reveal {
@@ -185,29 +277,153 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-spotlight]::after,
   .js-reveal,
   [data-tilt] {
+    transition: none !important;
+  }
+  [data-tilt] {
+    transform: none !important;
+  }
+}
+
+/* Magnetic buttons + parallax layers ease back to rest smoothly. */
+[data-magnetic] {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+[data-parallax] {
+  transition: transform 0.2s ease-out;
+  will-change: transform;
+}
+
+/* Top scroll-progress bar (element created by Interactive.tsx). */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(
+    90deg,
+    rgb(var(--c-brand)),
+    rgb(var(--c-grape)),
+    rgb(var(--c-mint))
+  );
+  z-index: 100;
+  pointer-events: none;
+}
+
+/* Active section's nav link. The sliding pill (#nav-indicator) supplies the
+   background, so the link itself only needs the darker ink text. */
+.nav-active {
+  color: rgb(var(--c-ink)) !important;
+}
+
+/* Pill that slides under the active nav link as you scroll. Position + width
+   are driven by Interactive.tsx; the transition does the "snap into place". */
+#nav-indicator {
+  background-image: linear-gradient(
+    180deg,
+    rgb(var(--glass-tint) / 0.85) 0%,
+    rgb(var(--glass-tint) / 0.58) 100%
+  );
+  box-shadow:
+    inset 0 1px 1px rgb(var(--glass-line) / 1),
+    inset 0 0 0 1px rgb(var(--glass-line) / 0.45),
+    0 4px 12px -3px rgba(20, 20, 40, 0.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  #nav-indicator {
+    transition: none !important;
+  }
+}
+
+/* Achievement toasts (created by Interactive.tsx in Player Mode). */
+#toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: 1.25rem;
+  transform: translateX(-50%);
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  pointer-events: none;
+}
+.toast {
+  min-width: 220px;
+  border-radius: 0.9rem;
+  padding: 0.6rem 1rem;
+  text-align: center;
+  background-color: rgb(var(--c-surface) / 0.92);
+  border: 1px solid rgb(var(--glass-line) / 0.5);
+  box-shadow: 0 12px 30px -10px rgba(20, 20, 40, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgb(var(--c-ink));
+}
+.toast-sub {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: rgb(var(--c-slate));
+  margin-top: 1px;
+}
+
+/* Player-mode particle layer — above the aurora, behind content. */
+#particle-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -5;
+  pointer-events: none;
+}
+
+/* Player Mode shifts the accent to a playful purple + warms the grid. */
+[data-mode="player"] {
+  --c-brand: 124 92 255;
+  --grid-line: 124 92 255;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-magnetic],
+  [data-parallax],
+  #scroll-progress,
+  .toast {
     transition: none !important;
   }
 }
 
 @layer utilities {
-  /* Soft colored gradient blobs behind the glass (the "aurora"). */
-  .aurora {
-    position: absolute;
-    border-radius: 9999px;
-    filter: blur(70px);
-    opacity: 0.55;
-    pointer-events: none;
-  }
-  .grid-faint {
+  /* Page backdrop: the canvas color with two faint diagonal gradient washes
+     (cool blue top-right, teal bottom-left). */
+  /* Page backdrop in ONE element so there's no sibling stacking ambiguity:
+     the graph grid is the TOP background layer, then the two gradient washes,
+     then the solid canvas color underneath. */
+  .canvas-tint {
+    background-color: rgb(var(--c-canvas));
     background-image:
-      linear-gradient(to right, rgba(20, 20, 40, 0.035) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(20, 20, 40, 0.035) 1px, transparent 1px);
-    background-size: 56px 56px;
-    -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 72%);
-            mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 72%);
+      linear-gradient(rgb(var(--grid-line) / 0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--grid-line) / 0.18) 1px, transparent 1px),
+      radial-gradient(130% 100% at 80% -8%, rgba(120, 145, 255, 0.07), transparent 60%),
+      radial-gradient(110% 90% at 12% 108%, rgba(120, 160, 255, 0.05), transparent 60%);
+    background-size: 46px 46px, 46px 46px, 100% 100%, 100% 100%;
+    -webkit-mask-image: radial-gradient(ellipse farthest-side at 50% 40%, #000 45%, rgba(0, 0, 0, 0.5) 72%, transparent 96%);
+            mask-image: radial-gradient(ellipse farthest-side at 50% 40%, #000 45%, rgba(0, 0, 0, 0.5) 72%, transparent 96%);
   }
   .text-gradient {
     background-image: linear-gradient(120deg, #0a84ff 0%, #6d5bd0 48%, #1eb6a0 100%);

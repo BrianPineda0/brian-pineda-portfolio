@@ -81,6 +81,17 @@ Fonts:
 
 Vercel, zero config. Push to `main`, import on [vercel.com/new](https://vercel.com/new), accept defaults. Next.js is auto-detected.
 
-## Updating the resume PDF
+## Updating the resume
 
-Replace `public/resume.pdf`. The hero "Resume" button links to that path with the `download` attribute.
+Two files back the résumé and **both** must be updated together:
+
+1. Replace `public/resume.pdf` (the downloadable/openable file — hero "Resume" button + Open/Download links use it).
+2. Regenerate `public/resume.png` — this is what's **displayed inline** in the Résumé section. We render an image instead of embedding the PDF because browsers set to "download PDFs" never show an inline `<iframe>`/`<object>` (which is what made the embed look blank). The image always renders, everywhere.
+
+Regenerate the PNG from the PDF with PyMuPDF:
+
+```bash
+python -c "import fitz; d=fitz.open('public/resume.pdf'); d[0].get_pixmap(matrix=fitz.Matrix(2.5,2.5)).save('public/resume.png')"
+```
+
+The displayed `<Image>` in `app/page.tsx` is hardcoded to `width={1530} height={1980}` (a portrait one-pager at 2.5× zoom). If the new PDF's aspect ratio differs, update those dims to match the printed pixmap size.

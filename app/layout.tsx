@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Brian Pineda — CS + EE @ Rutgers · AI-Native Builder",
   description:
-    "Brian Pineda is a CS + EE student at Rutgers building full-stack products with an AI-native workflow. Open to Summer 2026 SWE and AI/ML internships.",
+    "Brian Pineda is a CS + EE student at Rutgers building full-stack products and LLM systems with an AI-native workflow.",
   keywords: [
     "Brian Pineda",
     "Rutgers",
@@ -23,7 +23,6 @@ export const metadata: Metadata = {
     "Electrical Engineering",
     "AI-Native",
     "Software Engineer",
-    "Internship 2026",
     "Next.js",
     "FastAPI",
     "LLM",
@@ -33,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Brian Pineda — CS + EE @ Rutgers · AI-Native Builder",
     description:
-      "Full-stack products with an AI-native workflow. Open to Summer 2026 internships.",
+      "Full-stack products and LLM systems with an AI-native workflow.",
     url: siteUrl,
     siteName: "Brian Pineda",
     type: "website",
@@ -43,7 +42,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Brian Pineda — CS + EE @ Rutgers",
     description:
-      "Full-stack products with an AI-native workflow. Open to Summer 2026 internships.",
+      "Full-stack products and LLM systems with an AI-native workflow.",
   },
   robots: {
     index: true,
@@ -61,7 +60,7 @@ export default function RootLayout({
       lang="en"
       className={`${GeistSans.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-canvas text-ink font-sans antialiased">
+      <body className="text-ink font-sans antialiased">
         {children}
       </body>
     </html>
