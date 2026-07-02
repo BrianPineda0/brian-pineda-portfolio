@@ -37,7 +37,7 @@ const PROFILE = {
   resumeImage: "/resume.png",
   availability: "Building things that ship",
   currently:
-    "building LLM platforms & data pipelines with an AI-native workflow",
+    "interning at 361Firm — building LLM platforms & shipping production software",
   // First-person intro. Pieces marked { strong } render in solid ink.
   intro: [
     { text: "I'm a first-generation " },
@@ -74,31 +74,50 @@ type ExperienceItem = {
   role: string;
   org: string;
   period: string;
-  kind: "Leadership" | "Education";
+  kind: "Work" | "Leadership" | "Education";
   points: string[];
 };
 
 const EXPERIENCE: ExperienceItem[] = [
   {
-    role: "PR Chair",
-    org: "Mexican American Student Association (MASA) · Rutgers",
-    period: "Mar 2026 — Present",
+    role: "Software Engineering Intern",
+    org: "361Firm · Remote",
+    period: "May 2026 — Present",
+    kind: "Work",
+    points: [
+      "Spearheaded the platform's migration from Airtable REST API to Supabase (PostgreSQL), speeding up record lookups and securing sensitive investor data with row-level access.",
+      "Hardened 6 public REST API write routes in Next.js with a reusable input validation layer, backed by 20 unit tests.",
+      "Built attendance tracking for live investor events — real-time headcount via QR code scanning, backed by 26 unit tests.",
+      "Reorganized a 9,000-line single-file React client into modular, tested pieces and introduced 123 automated test cases across the platform.",
+    ],
+  },
+  {
+    role: "Member",
+    org: "ColorStack · Rutgers University",
+    period: "May 2026 — Present",
     kind: "Leadership",
     points: [
-      "Own communications and public-facing software for the organization.",
-      "Built and maintain the MASA student web app used by the membership.",
-      "Work directly with stakeholders to drive 10+ production releases.",
+      "Engaged with the community through hackathons, networking events, and professional development opportunities.",
+    ],
+  },
+  {
+    role: "Public Relations Chair",
+    org: "Mexican American Student Association (MASA) · Rutgers",
+    period: "Sep 2025 — Feb 2026",
+    kind: "Leadership",
+    points: [
+      "Produced 2–3 promotional pieces weekly with the executive board, driving stronger event engagement and visibility.",
+      "Led the organization's social media strategy and digital presence, keeping messaging consistent and on brand.",
     ],
   },
   {
     role: "B.S. Computer Science & Electrical Engineering",
     org: "Rutgers University — New Brunswick",
-    period: "2025 — 2029 (expected)",
+    period: "Expected May 2029",
     kind: "Education",
     points: [
       "GPA 3.8 / 4.0 · Dean's List.",
-      "Studying the full pipeline — from silicon up to the model-routing layer.",
-      "Coursework across data structures, AI, computer architecture & systems.",
+      "Coursework: AI, Data Structures, Design & Analysis of Algorithms, Data Management, Programming Languages, Systems Programming, Computer Architecture, Discrete Structures.",
     ],
   },
 ];
@@ -121,38 +140,38 @@ const PROJECTS: Project[] = [
   {
     id: "gencost",
     name: "GenCost",
-    category: "LLM Routing Platform",
-    context: "AI Tinkerers × ElevenLabs Hackathon · NYC · Apr 2026",
+    category: "AI Metering & Routing",
+    context: "Apr 2026",
     blurb:
-      "Production LLM platform with a smart router that picks the optimal model per request across 6 providers (OpenRouter, DeepSeek, Grok, ElevenLabs, fal.ai, Google) for real-time cost and quality optimization. 20+ FastAPI endpoints behind a Next.js dashboard with live cost tickers, charts, and interactive panels. Built on a 4-person team with Claude Code + CLAUDE.md context files.",
-    stack: ["Next.js", "React", "FastAPI", "PostgreSQL", "Claude"],
+      "Metering proxy and smart router that intercepts every generative-AI API call across 6 providers (LLM, voice, image, video), logging real cost and latency to a live Next.js + Supabase dashboard. Cost-aware router routes each request to the cheapest model clearing a Draft/Standard/Premium quality tier, with fallback chains and circuit breakers, covered by 39 unit tests.",
+    stack: ["Python", "FastAPI", "Next.js", "Supabase"],
     featured: true,
   },
   {
-    id: "pc-price-predictor",
-    name: "PC Hardware Price Predictor",
-    category: "Data Pipeline",
-    context: "Personal project · Jan 2026 → Present",
+    id: "pc-forecaster",
+    name: "PC Forecaster",
+    category: "ML Price Forecaster",
+    context: "Jan — May 2026",
     blurb:
-      "5-stage Python pipeline turning 9,497 raw scraped records into a normalized SQLite database — 3 tables, 75,000+ rows. Cross-source matching for 2,106 components using composite-key logic with validation at every stage. Driven end-to-end through Claude Code with structured context files.",
-    stack: ["Python", "SQL", "SQLite", "Pandas", "Claude Code"],
+      "Live PC-parts price forecaster that forecasts 12 months of prices and calls buy-or-wait, hitting R² 0.85–0.89 on real prices the model never saw. 5-stage Python pipeline that cleaned 9,452 records into 6,078 components and blended a 71,000-row price history.",
+    stack: ["Python", "scikit-learn", "Flask", "SQLite", "Pandas"],
     link: "https://pc-forecaster.vercel.app/",
     preview: "https://pc-forecaster.vercel.app/",
   },
   {
-    id: "masa-rutgers",
-    name: "MASA Rutgers Website",
-    category: "Student Org Web App",
-    context: "Mar 2026 → Present · In production",
+    id: "flexmore",
+    name: "FlexMore",
+    category: "On-Device CV Coach",
+    context: "Jun 2026 → Present",
     blurb:
-      "Student-facing web app for the Mexican American Student Association at Rutgers. Real-time forum, event calendar, and gallery deployed via GitHub Pages and used by the org's membership. 10+ production deployments driven by stakeholder feedback.",
-    stack: ["JavaScript", "Firebase", "Firestore", "HTML/CSS"],
+      "Hands-free webcam workout coach that counts reps and checks form in real time with MediaPipe, running fully on-device so no video ever leaves the machine. Pure TypeScript analysis core with pixel-space angle math, one-euro smoothing, and a hysteresis rep counter, verified headless across 58 unit tests.",
+    stack: ["TypeScript", "React", "Vite", "MediaPipe"],
   },
   {
     id: "android-photos",
     name: "Android Photos App",
     category: "Mobile · OOP",
-    context: "Nov → Dec 2025",
+    context: "Nov — Dec 2025",
     blurb:
       "Photo-management app ported from a JavaFX desktop project. 4 OOP model classes restructured with clean separation of concerns, 6 user-facing features, tested across 3+ emulator configs with hand-written Activities and unit tests.",
     stack: ["Java", "Android Studio"],
@@ -161,28 +180,20 @@ const PROJECTS: Project[] = [
 
 const STACK_CATEGORIES: { label: string; items: string[] }[] = [
   {
-    label: "AI-Native Workflow",
-    items: ["Claude Code", "Codex", "Cursor", "Gemini CLI", "Prompt Engineering", "LLM APIs"],
-  },
-  {
-    label: "Front End",
-    items: ["TypeScript", "React", "Next.js", "Tailwind CSS", "shadcn"],
-  },
-  {
-    label: "Back End",
-    items: ["Python", "FastAPI", "Node.js", "REST", "WebSocket", "JWT"],
-  },
-  {
-    label: "Data",
-    items: ["SQL", "PostgreSQL", "SQLite", "Firebase", "Firestore", "Pandas"],
-  },
-  {
     label: "Languages",
-    items: ["Python", "TypeScript", "JavaScript", "Java", "C", "SQL"],
+    items: ["Python", "TypeScript", "JavaScript", "Java", "SQL", "C", "C++", "HTML/CSS"],
   },
   {
-    label: "Cloud & Tools",
-    items: ["AWS", "Vercel", "Supabase", "Git", "Linux", "Android Studio"],
+    label: "Web & Frameworks",
+    items: ["React", "Next.js", "FastAPI", "Flask", "Node.js", "REST APIs", "Vite", "Tailwind"],
+  },
+  {
+    label: "Testing & Tooling",
+    items: ["Vitest", "CI Pipelines", "Git/GitHub", "AWS", "Supabase", "Vercel"],
+  },
+  {
+    label: "AI Dev Tools",
+    items: ["Claude Code", "Cursor", "GitHub Copilot", "Claude API", "Prompt Engineering", "LLM API Integration"],
   },
 ];
 
