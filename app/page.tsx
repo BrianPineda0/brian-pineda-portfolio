@@ -636,9 +636,13 @@ function SitePreview({ url }: { url: string }) {
 
 function ProjectCard({ project }: { project: Project }) {
   const featured = project.featured;
-  const className = `group relative glass refract rounded-3xl p-7 md:p-8 ${
-    featured ? "md:col-span-2" : ""
-  } flex flex-col`;
+  // Preview cards drop `refract`: its displacement-map backdrop-filter warps the
+  // card's OWN content (title/blurb bend like a fisheye, chips smear) once an
+  // iframe child forces a compositing layer. Plain `.glass` keeps the frosted
+  // look without the lensing, so the embed reads like a clean screenshot.
+  const className = `group relative glass ${
+    project.preview ? "" : "refract"
+  } rounded-3xl p-7 md:p-8 ${featured ? "md:col-span-2" : ""} flex flex-col`;
   const inner = (
     <>
       <div className="flex items-start justify-between gap-4">
@@ -686,7 +690,11 @@ function ProjectCard({ project }: { project: Project }) {
   return (
     <article
       className={className}
-      data-tilt="6"
+      // Cards with a live site embed must not tilt: the 3D perspective skews the
+      // embedded preview into a trapezoid and it reads as warped. Left flat, it
+      // looks like a real screenshot. (bevel/intensity below only apply when
+      // `refract` is present, which preview cards also drop — see className.)
+      data-tilt={project.preview ? undefined : "6"}
       data-bevel="0.18"
       data-intensity="0.45"
     >

@@ -184,14 +184,23 @@ function initLiquidGlass(): () => void {
     if (!isTouch && !reduce) {
       const trects = tilters.map((el) => el.getBoundingClientRect());
       for (let i = 0; i < tilters.length; i++) {
+        const el = tilters[i];
+        // Re-read data-tilt every frame instead of trusting the mount-time list.
+        // A card can lose its tilt after mount (a preview card sets it to
+        // undefined; Fast Refresh can strip the attribute) — honor that now so a
+        // stale reference doesn't keep tilting (and warping) an embed.
+        const max = +(el.dataset.tilt || 0);
+        if (!max) {
+          el.style.transform = "";
+          continue;
+        }
         const r = trects[i];
-        const max = +(tilters[i].dataset.tilt || 0);
         const ry = ((px - (r.left + r.width / 2)) / r.width) * max;
         const rx = -((py - (r.top + r.height / 2)) / r.height) * max;
         const near =
           px > r.left - 60 && px < r.right + 60 && py > r.top - 60 && py < r.bottom + 60;
         // Clear (not flatten) when far so reveal/hover transforms still apply.
-        tilters[i].style.transform = near
+        el.style.transform = near
           ? `perspective(1200px) rotateX(${rx}deg) rotateY(${ry}deg)`
           : "";
       }
@@ -209,6 +218,10 @@ function initLiquidGlass(): () => void {
     window.removeEventListener("pointermove", onMove);
     ro.disconnect();
     if (frame) cancelAnimationFrame(frame);
+    // Clear any tilt transform we painted, so a hot-reload / remount doesn't
+    // leave a card frozen mid-tilt (the fresh init re-queries tilters anew, and
+    // a card that lost [data-tilt] would otherwise keep its last transform).
+    tilters.forEach((el) => (el.style.transform = ""));
   };
 }
 

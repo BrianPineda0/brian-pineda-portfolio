@@ -7,7 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 // ---------------------------------------------------------------------------
 // AvatarFlip — the hero "name" tile, now a square that flips through faces.
 // It auto-advances on a timer AND is interactive: click/tap the tile (or the
-// dots) to flick through. Faces: BP monogram → Rutgers → 361 Firm internship.
+// dots) to flick through. Faces: BP monogram → Rutgers → 361 Firm → Jukebox.
 //
 // Mechanism: one card rotated by `rot` (always a multiple of 180°). Two physical
 // faces (front at 0°, back at 180°, backface hidden). We keep whichever face is
@@ -39,7 +39,7 @@ function RutgersFace() {
   const [failed, setFailed] = useState(false);
   return (
     <div
-      className="relative grid h-full w-full place-items-center"
+      className="relative grid h-full w-full place-items-center overflow-hidden"
       style={{ backgroundColor: "#cf1230" }}
     >
       {failed ? (
@@ -60,7 +60,8 @@ function RutgersFace() {
           src="/rutgers.png"
           alt="Rutgers"
           onError={() => setFailed(true)}
-          className="absolute inset-0 h-full w-full object-cover p-2.5"
+          // Scaled up (parent clips) so the R fills more of the tile — zoomed in.
+          className="absolute inset-0 h-full w-full scale-[1.18] object-cover"
         />
       )}
       <span className="shimmer-sheen" aria-hidden="true" />
@@ -100,6 +101,24 @@ const FACES: Face[] = [
       </div>
     ),
   },
+  {
+    caption: "Intern at Jukebox",
+    render: (
+      // Real Jukebox symbol (cream lockup with the mark baked in) filling the tile.
+      <div
+        className="relative grid h-full w-full place-items-center overflow-hidden"
+        style={{ backgroundColor: "#f7f0e7" }}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/jukebox.png"
+          alt="Jukebox"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <span className="shimmer-sheen" aria-hidden="true" />
+      </div>
+    ),
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -109,11 +128,17 @@ const FACES: Face[] = [
 // accents shift and the Apple/glass look holds. The BP face keeps the default
 // palette. These indices align with FACES above.
 // ---------------------------------------------------------------------------
-const FACE_SRC: (string | null)[] = [null, "/rutgers.png", "/361firm.gif"];
+const FACE_SRC: (string | null)[] = [
+  null,
+  "/rutgers.png",
+  "/361firm.gif",
+  "/jukebox.png",
+];
 const FACE_FALLBACK: ({ r: number; g: number; b: number } | null)[] = [
   null,
   { r: 207, g: 18, b: 48 }, // Rutgers scarlet
   { r: 59, g: 130, b: 196 }, // 361 Firm globe blue
+  { r: 245, g: 166, b: 75 }, // Jukebox orange
 ];
 
 type Accent = { brand: string; grape: string; mint: string; grid: string };
