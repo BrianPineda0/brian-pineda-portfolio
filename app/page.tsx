@@ -37,14 +37,14 @@ const PROFILE = {
   resumeImage: "/resume.png",
   availability: "Building things that ship",
   currently:
-    "interning at 361Firm — building LLM platforms & shipping production software",
+    "an incoming Software Engineering Intern at Johnson & Johnson, starting Jan 2027",
   // First-person intro. Pieces marked { strong } render in solid ink.
   intro: [
     { text: "I'm a first-generation " },
     { text: "Computer Science + Electrical Engineering", strong: true },
     {
       text:
-        " student at Rutgers who likes building things that actually ship — full-stack products, data pipelines, and the ",
+        " student at Rutgers who likes building things that actually ship: full-stack products, data pipelines, and the ",
     },
     { text: "LLM systems", strong: true },
     {
@@ -65,8 +65,8 @@ const HERO_STATS: {
   suffix?: string;
 }[] = [
   { k: "GPA", v: "3.8 / 4.0", num: 3.8, dec: 1, suffix: " / 4.0" },
-  { k: "Status", v: "Dean's List" },
-  { k: "Grad", v: "May 2029" },
+  { k: "Next", v: "J&J · Jan 2027" },
+  { k: "Grad", v: "May 2028" },
   { k: "Focus", v: "AI / ML · Full-stack" },
 ];
 
@@ -80,45 +80,74 @@ type ExperienceItem = {
 
 const EXPERIENCE: ExperienceItem[] = [
   {
-    role: "Software Engineering Intern",
-    org: "361Firm · Remote",
-    period: "May 2026 — Present",
+    role: "Software Engineering Intern (Incoming)",
+    org: "Johnson & Johnson · Hybrid, Spring House, PA",
+    period: "Jan 2027 - May 2027",
     kind: "Work",
     points: [
-      "Spearheaded the platform's migration from Airtable REST API to Supabase (PostgreSQL), speeding up record lookups and securing sensitive investor data with row-level access.",
-      "Hardened 6 public REST API write routes in Next.js with a reusable input validation layer, backed by 20 unit tests.",
-      "Built attendance tracking for live investor events — real-time headcount via QR code scanning, backed by 26 unit tests.",
-      "Reorganized a 9,000-line single-file React client into modular, tested pieces and introduced 123 automated test cases across the platform.",
+      "Incoming platform and cloud engineering co-op, working across AWS, GenAI, and DevOps tooling to build and integrate services.",
     ],
   },
   {
-    role: "Member",
-    org: "ColorStack · Rutgers University",
-    period: "May 2026 — Present",
-    kind: "Leadership",
+    role: "Software Engineering Intern",
+    org: "361Firm · New York, NY, Part-Time",
+    period: "May 2026 - Sep 2026",
+    kind: "Work",
     points: [
-      "Engaged with the community through hackathons, networking events, and professional development opportunities.",
+      "Streamlined event check-in by building a QR-based attendance tracker in JavaScript, TypeScript, React, and Tailwind CSS.",
+      "Cut requests per full load from 251 to 26 by driving a migration from Airtable REST APIs to Supabase (PostgreSQL).",
+      "Sped up feature delivery by refactoring the React codebase into modular, tested components on a Git and CI/CD workflow.",
+      "Blocked malformed and malicious input by hardening 6 REST API routes in Next.js on Vercel with server-side validation.",
+    ],
+  },
+  {
+    role: "Software Engineering Intern",
+    org: "Verno (YC F26) · Remote, Part-Time",
+    period: "Jul 2026 - Aug 2026",
+    kind: "Work",
+    points: [
+      "Prevented invalid edits from saving by building shape-editing tools in Electron, TypeScript, and CSS, verified by 21 tests.",
+      "Gave customers a secure CSV export to review their data by engineering it in JavaScript with Git, backed by 19 tests.",
+      "Enabled engineers to organize edits in a verifiable history by delivering a full-stack feature in React, Zustand, and Python.",
+    ],
+  },
+  {
+    role: "Software Engineering Intern",
+    org: "JukeBox · Remote, Part-Time",
+    period: "Jul 2026 - Aug 2026",
+    kind: "Work",
+    points: [
+      "Built the concert rating tab in React Native and TypeScript via Expo/EAS, letting users rate and discover concerts nearby.",
+      "Cut external API calls per repeat search from 2 to 1 by caching results in an Express and Node.js search service.",
+      "Modeled rating data in MySQL with SQL constraints, integration tests, and Git, keeping records clean and duplicate-free.",
     ],
   },
   {
     role: "Public Relations Chair",
     org: "Mexican American Student Association (MASA) · Rutgers",
-    period: "Sep 2025 — Feb 2026",
+    period: "Sep 2025 - Feb 2026",
     kind: "Leadership",
     points: [
-      "Produced 2–3 promotional pieces weekly with the executive board, driving stronger event engagement and visibility.",
-      "Led the organization's social media strategy and digital presence, keeping messaging consistent and on brand.",
+      "Planned and coordinated events as PR Chair, producing weekly promotional content that boosted turnout and engagement.",
+      "Managed the organization's promotional budget, delivering campaigns on budget while growing its social media reach.",
+      "Partnered weekly with the executive board to align messaging, plan programming, and keep organization events on track.",
+    ],
+  },
+  {
+    role: "Member",
+    org: "ColorStack · Rutgers University",
+    period: "2025 - Present",
+    kind: "Leadership",
+    points: [
+      "Engaged with the ColorStack community through hackathons, networking events, and professional development opportunities.",
     ],
   },
   {
     role: "B.S. Computer Science & Electrical Engineering",
-    org: "Rutgers University — New Brunswick",
-    period: "Expected May 2029",
+    org: "Rutgers University - New Brunswick",
+    period: "Expected May 2028",
     kind: "Education",
-    points: [
-      "GPA 3.8 / 4.0 · Dean's List.",
-      "Coursework: AI, Data Structures, Design & Analysis of Algorithms, Data Management, Programming Languages, Systems Programming, Computer Architecture, Discrete Structures.",
-    ],
+    points: ["GPA 3.8 / 4.0."],
   },
 ];
 
@@ -166,15 +195,6 @@ const PROJECTS: Project[] = [
     blurb:
       "Hands-free webcam workout coach that counts reps and checks form in real time with MediaPipe, running fully on-device so no video ever leaves the machine. Pure TypeScript analysis core with pixel-space angle math, one-euro smoothing, and a hysteresis rep counter, verified headless across 58 unit tests.",
     stack: ["TypeScript", "React", "Vite", "MediaPipe"],
-  },
-  {
-    id: "android-photos",
-    name: "Android Photos App",
-    category: "Mobile · OOP",
-    context: "Nov — Dec 2025",
-    blurb:
-      "Photo-management app ported from a JavaFX desktop project. 4 OOP model classes restructured with clean separation of concerns, 6 user-facing features, tested across 3+ emulator configs with hand-written Activities and unit tests.",
-    stack: ["Java", "Android Studio"],
   },
 ];
 
@@ -505,7 +525,7 @@ function About() {
                 ["Major", "CS + EE"],
                 ["School", "Rutgers University"],
                 ["Location", PROFILE.location],
-                ["Graduation", "May 2029"],
+                ["Graduation", "May 2028"],
               ].map(([k, v]) => (
                 <div key={k} className="flex items-baseline justify-between gap-4 py-2.5">
                   <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-slate">

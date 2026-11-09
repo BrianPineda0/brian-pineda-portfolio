@@ -30,7 +30,7 @@ All copy and project data is in **constants at the top of `app/page.tsx`** (abov
 - `PROFILE` — greeting, first-person `intro` (pieces marked `{ strong }` render in solid ink), contact, handles, `currently`, availability
 - `HERO_STATS` — four chips in the hero avatar card
 - `EXPERIENCE` — timeline items (`kind: "Leadership" | "Education"`, with `period` + `points[]`)
-- `PROJECTS` — four cards; one has `featured: true` and spans two columns. Each may set an optional `link` — only then does the card become clickable (no dead link affordances)
+- `PROJECTS` — three cards; one has `featured: true` and spans two columns. Each may set an optional `link` — only then does the card become clickable (no dead link affordances)
 - `STACK_CATEGORIES` — six skill buckets
 - `NAV_LINKS`
 
